@@ -1,0 +1,44 @@
+<ul class="track" *ngIf="carsData$ | async as carsData">
+  <li class="track__item" *ngFor="let carItem of carsData">
+    <div class="track__item-top">
+      <button class="track__button-select" title="select" type="button">
+        SELECT
+      </button>
+
+      <button class="track__button-select" title="delete" type="button">
+        DELETE
+      </button>
+      <span class="track__car-name">{{ carItem.name }}</span>
+    </div>
+    <div class="track__item-bottom">
+      <button
+        class="track__button-play"
+        title="play"
+        type="button"
+        >
+        <img
+          width="20"
+          alt="play"
+          src="./../../../../assets/icons/play-svgrepo-com.svg
+        " />
+      </button>
+      <button
+        class="track__button-play"
+        title="stop"
+      
+        type="button">
+        <img
+          width="20"
+          alt="play"
+          src="./../../../../assets/icons/stop-svgrepo-com.svg
+        " />
+      </button>
+      <app-car [car]="carItem"></app-car>
+    </div>
+    <img
+      class="track__flag"
+      alt="flag"
+      width="24"
+      src="../../../../assets/icons/flag-finish.svg" />
+  </li>
+</ul>

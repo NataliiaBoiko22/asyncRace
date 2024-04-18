@@ -1,0 +1,56 @@
+@import './../../../../assets/styles/variables.scss';
+@import './../../../../assets/styles/mixins.scss';
+
+.track {
+  @include flex-column-start;
+  gap: 8px;
+
+  &__item {
+    @include flex-column-start;
+    gap: 12px;
+    position: relative;
+    padding: 2px;
+    background: linear-gradient(#616161, 60%, rgb(32, 32, 32));
+    border-bottom: 2.5px dotted $yellow_color;
+  }
+  &__button-select {
+    color: $milk_color;
+    @include font-14-500;
+
+    width: auto;
+    padding: 0 6px;
+    background-color: inherit;
+    border: 1px solid $milk_color;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  &__button-play {
+    width: auto;
+    padding: 4px 4px 0 4px;
+    background-color: $milk_color;
+    cursor: pointer;
+    border-radius: 8px;
+  }
+  &__item-top {
+    @include flex-row-start;
+    gap: 5px;
+  }
+  &__car-name {
+    @include font-16-500;
+    color: $milk_color;
+  }
+  &__car_img {
+    position: absolute;
+    left: 70px;
+    top: 25px;
+    width: 100px;
+    height: 60px;
+  }
+  &__flag {
+    position: absolute;
+    right: 20px;
+    top: 40px;
+  }
+}
+
+
