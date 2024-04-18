@@ -1,16 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
-import {
-  catchError,
-  exhaustMap,
-  from,
-  map,
-  Observable,
-  of,
-  take,
-  tap,
-} from 'rxjs';
+import { Action } from '@ngrx/store';
+import { catchError, exhaustMap, from, map, Observable, of, take } from 'rxjs';
 import { HttpService } from '../core/services/http.service';
 import { loadCarsData } from './actions';
 

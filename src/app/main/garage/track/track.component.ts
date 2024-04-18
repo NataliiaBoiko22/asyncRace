@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { MoveService } from '../../../core/services/move.service';
 import { selectCars } from '../../../Store/selectors';
 import { CarComponent } from '../car/car.component';
 
@@ -18,12 +19,22 @@ export class TrackComponent implements OnInit {
   public carsData$ = this.store.select(selectCars);
   currentPage$!: Observable<number>;
 
-  constructor(private store: Store) {}
+  constructor(
+    private store: Store,
+    private moveService: MoveService
+  ) {}
   ngOnInit(): void {
     console.log('ngOnInit TrackComponent');
     this.store.dispatch({ type: '[Cars] Load Cars Data' });
     this.carsData$.subscribe(data => {
       console.log('Cars data:', data);
     });
+  }
+  moveCar(id: number) {
+    this.moveService.moveCar(id);
+  }
+
+  stopCar(id: number) {
+    this.moveService.stopCar(id);
   }
 }

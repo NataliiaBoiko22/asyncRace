@@ -34,4 +34,46 @@ export class HttpService {
         })
       );
   }
+  public startStopEngine(carId: number, status: string) {
+    console.log('httpClient startStopEngine');
+    const params = {
+      id: carId,
+      status: status,
+    };
+    return this.httpClient
+      .patch<StartStopParameter>(
+        this.url + this.basePath.engine,
+        {},
+        { params }
+      )
+      .pipe(
+        catchError(error => {
+          console.error('Error occurred:', error);
+          return throwError(
+            () => new Error('Something went wrong; please try again later.')
+          );
+        })
+      );
+  }
+
+  public switchToDriveMode(id: number) {
+    const params = {
+      id: id,
+      status: 'drive',
+    };
+    return this.httpClient
+      .patch<StartStopParameter>(
+        this.url + this.basePath.engine,
+        {},
+        { params }
+      )
+      .pipe(
+        catchError(error => {
+          console.error('Error occurred:', error);
+          return throwError(
+            () => new Error('Something went wrong; please try again later.')
+          );
+        })
+      );
+  }
 }
