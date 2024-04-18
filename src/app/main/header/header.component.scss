@@ -1,0 +1,94 @@
+@import './../../../assets/styles/variables.scss';
+@import './../../../assets/styles/mixins.scss';
+
+.header {
+  @include flex-row-space;
+  @include font-16-400;
+
+  background-color: $black_color;
+  width: auto;
+  height: 100px;
+  padding: 0 16px;
+  border-bottom: 3px dashed $yellow_color;
+  &__buttons {
+    @include flex-row-space;
+    gap: 16px;
+  }
+  &__logo {
+    position: relative;
+    margin-left: 10px;
+    width: 100px;
+    height: 100px;
+    background: rgba(0, 0, 0, 0.75);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* overflow: hidden; */
+  }
+  &__logo::before {
+    display: flex;
+    content: '';
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-image: conic-gradient(
+      transparent,
+      transparent,
+      transparent,
+      $milk_color
+    );
+    animation: animate 4s linear infinite;
+  }
+  &__logo::after {
+    display: flex;
+
+    content: '';
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-image: conic-gradient(
+      transparent,
+      transparent,
+      transparent,
+      $yellow_color
+    );
+    animation: animate 4s linear infinite;
+    animation-delay: -2s;
+  }
+
+  &__logo span {
+    position: absolute;
+    inset: 5px;
+    background-color: $black_color;
+    border-radius: 50%;
+    z-index: 1;
+  }
+  &__logo h1 {
+    position: relative;
+    background: none;
+    border-radius: 50%;
+    z-index: 2;
+    padding: 0 0 0 15px;
+    width: 90px;
+    color: $yellow_color;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.1;
+    text-shadow:
+      1px 1px 2px rgb(0, 0, 0),
+      0 0 1em rgb(243, 190, 18),
+      0 0 0.2em rgb(239, 213, 14);
+  }
+
+  @keyframes animate {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}

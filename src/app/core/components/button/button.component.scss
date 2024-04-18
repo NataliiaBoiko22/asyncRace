@@ -1,0 +1,54 @@
+@import './../../../../assets/styles/variables.scss';
+@import './../../../../assets/styles/mixins.scss';
+
+.button {
+  @include font-16-400;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 12px 24px;
+
+  &__dark {
+    background-color: $yellow_color_dark;
+    color: $text_color_light;
+    border: none;
+
+    &:hover,
+    :focus {
+      background-color: $yellow_color;
+      color: $text_color_dark;
+    }
+
+    //   &:active {
+    //   background-color: $common_text_color;
+    //   color: $click_green_button;
+    // }
+
+    // &:disabled {
+    //   background-color: $stroke-color;
+    //   color: $blocked_light_text;
+    //   cursor: not-allowed;
+    // }
+  }
+  &__light {
+    background-color: $yellow_color;
+
+    &:hover,
+    :focus {
+      background-color: $yellow_color_dark;
+    }
+
+    &:focus {
+      color: $text_color_dark;
+    }
+
+    // &:active {
+    //   background-color: $common_text_color;
+    //   color: $text_color_light;
+    // }
+
+    // &:disabled {
+    //   background-color: $blocked_gray_button;
+    //   color: $blocked_light_text;
+    // }
+  }
+}
