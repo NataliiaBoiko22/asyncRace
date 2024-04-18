@@ -1,0 +1,35 @@
+@import './../../../../assets/styles/variables.scss';
+@import './../../../../assets/styles/mixins.scss';
+
+.settings {
+  @include flex-column-start;
+  gap: 16px;
+  &__input-item {
+    @include flex-row-start;
+    gap: 16px;
+    position: relative;
+    width: 100%;
+  }
+
+  &__input {
+    width: 250px;
+    padding: 12px;
+    background-color: $milk_color;
+    border-radius: 20px;
+    @include font-16-400;
+  }
+  &__input-color {
+    position: absolute;
+    top: 10px;
+    left: 210px;
+    border: none;
+    outline: none;
+    background-color: inherit;
+  }
+  input[type='color']::-webkit-color-swatch {
+    border: none;
+    border-radius: 10px;
+    width: 60px;
+    height: 20px;
+  }
+}

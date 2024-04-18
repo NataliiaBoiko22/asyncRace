@@ -1,0 +1,11 @@
+@import './../../../assets/styles/variables.scss';
+@import './../../../assets/styles/mixins.scss';
+
+.garage-wrapper{
+    @include flex-column-start;
+    width: auto;
+    height: 100vh;
+    background-color: $background_color;
+    gap: 20px;
+    padding: 20px;
+}
