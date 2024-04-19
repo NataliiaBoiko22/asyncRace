@@ -1,0 +1,50 @@
+@import './../../../../assets/styles/variables.scss';
+@import './../../../../assets/styles/mixins.scss';
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &__title {
+    @include font-20-600;
+    color: $yellow_color;
+  }
+  &__content {
+    @include flex-column-center;
+    gap: 16px;
+    position: relative;
+    background-color: $milk_color;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    width: 250px;
+    height: 150px;
+    border: 2px dotted $yellow_color;
+  }
+  &__name {
+    @include font-20-600;
+    color: $text_color_dark;
+  }
+  &__time {
+    @include font-20-600;
+    color: $text_color_dark;
+  }
+  &__close {
+    width: 16px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    border: none;
+    outline: none;
+  }
+  &__close:focus,
+  :hover {
+    color: $yellow_color;
+  }
+}

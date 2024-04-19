@@ -8,7 +8,6 @@ import {
   map,
   Observable,
   of,
-  take,
   tap,
   withLatestFrom,
 } from 'rxjs';
@@ -22,7 +21,7 @@ export class RaceEffects {
     this.actions$.pipe(
       ofType('[Cars] Load Cars Data'),
       withLatestFrom(this.store.select(selectCurrentPage)),
-      exhaustMap(([action, currentPage]) =>
+      exhaustMap(([, currentPage]) =>
         from(this.httpService.getCarsList(currentPage, 7)).pipe(
           tap(response => {
             const totalCountHeader = Number(

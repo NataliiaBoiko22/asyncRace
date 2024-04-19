@@ -3,12 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map, Observable } from 'rxjs';
-import {
-  loadCarsData,
-  loadNextPage,
-  loadPrevPage,
-  setCurrentPage,
-} from '../../../Store/actions';
+import { setCurrentPage } from '../../../Store/actions';
 import { selectCars, selectCurrentPage } from '../../../Store/selectors';
 import { CarsResponseBody } from '../../models/car';
 import { ButtonComponent } from '../button/button.component';

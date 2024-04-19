@@ -24,7 +24,7 @@ export class CarService {
   }
 
   private generateRandomColor(): string {
-    let signs = '0123456789ABCDEF';
+    const signs = '0123456789ABCDEF';
     let randomColor = '#';
     for (let col = 0; col < 6; col++) {
       randomColor += signs[Math.floor(Math.random() * signs.length)];

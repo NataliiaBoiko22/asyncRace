@@ -12,6 +12,7 @@ import { selectCars } from '../../Store/selectors';
 import { Car, CarsResponseBody } from '../models/car';
 import { StartStopParameter } from '../models/query-parametr';
 import { HttpService } from './http.service';
+import { ModalService } from './modal.service';
 
 @Injectable({
   providedIn: 'root',
@@ -20,14 +21,15 @@ export class MoveService {
   constructor(
     private httpService: HttpService,
     private builder: AnimationBuilder,
-    private store: Store
+    private store: Store,
+    private modalService: ModalService
   ) {}
   success = {};
   time = 0;
   private firstSuccessTime: number | null = null;
   private animationPlayers: { [id: number]: AnimationPlayer } = {};
 
-  private animateCar(id: number, data: StartStopParameter): void {
+  private animateCar(id: number, data: StartStopParameter, name: string): void {
     const width = document.documentElement.clientWidth;
     const time = Math.floor(data.distance / data.velocity);
     const distanceToMove = Math.min(width - 180, data.distance);
@@ -45,20 +47,21 @@ export class MoveService {
     player.play();
     player.onDone(() => {
       if (!this.firstSuccessTime || time < this.firstSuccessTime) {
-        this.firstSuccessTime = time;
+        this.firstSuccessTime = Math.round((time / 1000) * 100) / 100;
         console.log('this.firstSuccessTime', this.firstSuccessTime);
+        this.modalService.open(`${name}`, `${this.firstSuccessTime}`);
       }
     });
     this.animationPlayers[id] = player;
   }
 
-  moveCar(id: number): void {
+  moveCar(id: number, name: string): void {
     this.httpService
       .startStopEngine(id, 'started')
       .pipe(
         mergeMap((data: StartStopParameter) => {
           console.log('startStopEngine received:', data);
-          this.animateCar(id, data);
+          this.animateCar(id, data, name);
           return this.httpService.switchToDriveMode(id).pipe(
             catchError(() => {
               this.animationPlayers[id]?.pause();
@@ -75,8 +78,7 @@ export class MoveService {
       .select(selectCars)
       .subscribe((carsResponse: CarsResponseBody) => {
         carsResponse.forEach((car: Car) => {
-          const carId = car.id;
-          this.moveCar(carId);
+          this.moveCar(car.id, car.name);
         });
       });
   }

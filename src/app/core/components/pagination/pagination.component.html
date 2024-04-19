@@ -1,15 +1,17 @@
 <div class="pagination">
-  <span
+  <button
+    type="button"
     (click)="goToPrevPage(currentPage)"
     *ngIf="currentPage > 1"
-    class="page-link"
-    >{{ currentPage - 1 }}</span
-  >
+    class="pagination__page-link">
+    {{ currentPage - 1 }}
+  </button>
   <span class="active">{{ currentPage }}</span>
-  <span
+  <button
+    type="button"
     (click)="goToNextPage(currentPage)"
     *ngIf="currentPage < totalPages"
-    class="page-link"
-    >{{ currentPage + 1 }}</span
-  >
+    class="pagination__page-link">
+    {{ currentPage + 1 }}
+  </button>
 </div>

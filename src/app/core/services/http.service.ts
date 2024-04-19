@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, tap, throwError } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { Car, CarRequestBody, CarsResponseBody } from '../models/car';
 import { StartStopParameter } from '../models/query-parametr';
 
@@ -31,6 +31,19 @@ export class HttpService {
         params,
         observe: 'response',
       })
+      .pipe(
+        catchError(error => {
+          console.error('Error occurred:', error);
+          return throwError(
+            () => new Error('Something went wrong; please try again later.')
+          );
+        })
+      );
+  }
+
+  getCar(id: number) {
+    return this.httpClient
+      .get<CarsResponseBody>(this.url + this.basePath.garage + `/${id}`)
       .pipe(
         catchError(error => {
           console.error('Error occurred:', error);

@@ -15,7 +15,6 @@ import { CarComponent } from '../car/car.component';
   styleUrl: './track.component.scss',
 })
 export class TrackComponent implements OnInit {
-  currentPageCars$!: Observable<any[]>;
   @ViewChild('carImage') carImage!: ElementRef;
   move = false;
   public carsData$ = this.store.select(selectCars);
@@ -35,8 +34,8 @@ export class TrackComponent implements OnInit {
       console.log('Cars data:', data);
     });
   }
-  moveCar(id: number) {
-    this.moveService.moveCar(id);
+  moveCar(id: number, carname: string) {
+    this.moveService.moveCar(id, carname);
   }
 
   stopCar(id: number) {
@@ -45,7 +44,4 @@ export class TrackComponent implements OnInit {
   deleteCar(id: number) {
     this.carService.deleteCar(id);
   }
-}
-function totalCount(state: object): unknown {
-  throw new Error('Function not implemented.');
 }
