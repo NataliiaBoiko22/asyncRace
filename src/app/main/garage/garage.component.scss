@@ -4,7 +4,7 @@
 .garage-wrapper{
     @include flex-column-start;
     width: auto;
-    height: 100vh;
+    height: 100%;
     background-color: $background_color;
     gap: 20px;
     padding: 20px;

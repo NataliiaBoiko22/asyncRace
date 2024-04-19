@@ -5,3 +5,7 @@ export interface Car {
 }
 
 export type CarsResponseBody = Car[];
+export interface CarRequestBody {
+  name: string;
+  color: string;
+}

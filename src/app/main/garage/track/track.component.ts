@@ -2,8 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+import { CarService } from '../../../core/services/car.service';
 import { MoveService } from '../../../core/services/move.service';
-import { selectCars } from '../../../Store/selectors';
+import { selectCars, selectTotalCount } from '../../../Store/selectors';
 import { CarComponent } from '../car/car.component';
 
 @Component({
@@ -14,14 +15,18 @@ import { CarComponent } from '../car/car.component';
   styleUrl: './track.component.scss',
 })
 export class TrackComponent implements OnInit {
+  currentPageCars$!: Observable<any[]>;
   @ViewChild('carImage') carImage!: ElementRef;
   move = false;
   public carsData$ = this.store.select(selectCars);
+  public totalCount$ = this.store.select(selectTotalCount);
+
   currentPage$!: Observable<number>;
 
   constructor(
     private store: Store,
-    private moveService: MoveService
+    private moveService: MoveService,
+    private carService: CarService
   ) {}
   ngOnInit(): void {
     console.log('ngOnInit TrackComponent');
@@ -37,4 +42,10 @@ export class TrackComponent implements OnInit {
   stopCar(id: number) {
     this.moveService.stopCar(id);
   }
+  deleteCar(id: number) {
+    this.carService.deleteCar(id);
+  }
+}
+function totalCount(state: object): unknown {
+  throw new Error('Function not implemented.');
 }

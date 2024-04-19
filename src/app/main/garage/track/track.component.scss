@@ -1,5 +1,14 @@
 @import './../../../../assets/styles/variables.scss';
 @import './../../../../assets/styles/mixins.scss';
+.track-wrapper {
+  @include flex-column-start;
+  gap: 8px;
+}
+.track-counter{
+  @include flex-column-start;
+    color: $milk_color;
+    @include font-20-600;
+}
 
 .track {
   @include flex-column-start;
@@ -52,5 +61,3 @@
     top: 40px;
   }
 }
-
-

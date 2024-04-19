@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, throwError } from 'rxjs';
-import { CarsResponseBody } from '../models/car';
+import { catchError, map, Observable, tap, throwError } from 'rxjs';
+import { Car, CarRequestBody, CarsResponseBody } from '../models/car';
 import { StartStopParameter } from '../models/query-parametr';
 
 @Injectable({
@@ -16,7 +16,10 @@ export class HttpService {
   };
   constructor(private httpClient: HttpClient) {}
 
-  public getCarsList(page: number, limit: number) {
+  public getCarsList(
+    page: number,
+    limit: number
+  ): Observable<HttpResponse<CarsResponseBody>> {
     console.log('httpClient getCarsList');
     const params = {
       _page: page.toString(),
@@ -24,7 +27,10 @@ export class HttpService {
     };
 
     return this.httpClient
-      .get<CarsResponseBody>(this.url + this.basePath.garage, { params })
+      .get<CarsResponseBody>(this.url + this.basePath.garage, {
+        params,
+        observe: 'response',
+      })
       .pipe(
         catchError(error => {
           console.error('Error occurred:', error);
@@ -34,6 +40,7 @@ export class HttpService {
         })
       );
   }
+
   public startStopEngine(carId: number, status: string) {
     console.log('httpClient startStopEngine');
     const params = {
@@ -67,6 +74,41 @@ export class HttpService {
         {},
         { params }
       )
+      .pipe(
+        catchError(error => {
+          console.error('Error occurred:', error);
+          return throwError(
+            () => new Error('Something went wrong; please try again later.')
+          );
+        })
+      );
+  }
+  createCar(body: CarRequestBody): Observable<Car> {
+    console.log('httpClient createCar', body);
+
+    return this.httpClient
+      .post<Car>(this.url + this.basePath.garage, body, {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+      })
+      .pipe(
+        catchError(error => {
+          console.error('Error occurred:', error);
+          return throwError(
+            () => new Error('Something went wrong; please try again later.')
+          );
+        })
+      );
+  }
+
+  deleteCar(id: number) {
+    return this.httpClient
+      .delete(this.url + this.basePath.garage + `/${id}`, {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+      })
       .pipe(
         catchError(error => {
           console.error('Error occurred:', error);
