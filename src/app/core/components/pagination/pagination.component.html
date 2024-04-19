@@ -1,0 +1,15 @@
+<div class="pagination">
+  <span
+    (click)="goToPrevPage(currentPage)"
+    *ngIf="currentPage > 1"
+    class="page-link"
+    >{{ currentPage - 1 }}</span
+  >
+  <span class="active">{{ currentPage }}</span>
+  <span
+    (click)="goToNextPage(currentPage)"
+    *ngIf="currentPage < totalPages"
+    class="page-link"
+    >{{ currentPage + 1 }}</span
+  >
+</div>
