@@ -8,10 +8,11 @@ import {
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { catchError, EMPTY, mergeMap } from 'rxjs';
+import { createWinnerData } from '../../Store/actions/winners-actions';
 import { selectCars } from '../../Store/selectors';
 import { Car, CarsResponseBody } from '../models/car';
 import { StartStopParameter } from '../models/query-parametr';
-import { HttpService } from './http.service';
+import { GarageHttpService } from './http/garage-http.service';
 import { ModalService } from './modal.service';
 
 @Injectable({
@@ -19,20 +20,24 @@ import { ModalService } from './modal.service';
 })
 export class MoveService {
   constructor(
-    private httpService: HttpService,
+    private garageHttpService: GarageHttpService,
     private builder: AnimationBuilder,
     private store: Store,
     private modalService: ModalService
   ) {}
   success = {};
   time = 0;
+  winner = {
+    id: 0,
+    time: 0,
+  };
   private firstSuccessTime: number | null = null;
   private animationPlayers: { [id: number]: AnimationPlayer } = {};
 
   private animateCar(id: number, data: StartStopParameter, name: string): void {
     const width = document.documentElement.clientWidth;
     const time = Math.floor(data.distance / data.velocity);
-    const distanceToMove = Math.min(width - 180, data.distance);
+    const distanceToMove = Math.min(width - 200, data.distance);
     const animation = this.builder.build([
       animate(
         `${time}ms`,
@@ -48,21 +53,24 @@ export class MoveService {
     player.onDone(() => {
       if (!this.firstSuccessTime || time < this.firstSuccessTime) {
         this.firstSuccessTime = Math.round((time / 1000) * 100) / 100;
-        console.log('this.firstSuccessTime', this.firstSuccessTime);
+        this.winner.id = id;
+        this.winner.time = this.firstSuccessTime;
         this.modalService.open(`${name}`, `${this.firstSuccessTime}`);
+        this.store.dispatch(createWinnerData({ data: this.winner }));
       }
     });
     this.animationPlayers[id] = player;
   }
 
   moveCar(id: number, name: string): void {
-    this.httpService
+    this.firstSuccessTime = null;
+    this.resetAllCars();
+    this.garageHttpService
       .startStopEngine(id, 'started')
       .pipe(
         mergeMap((data: StartStopParameter) => {
-          console.log('startStopEngine received:', data);
           this.animateCar(id, data, name);
-          return this.httpService.switchToDriveMode(id).pipe(
+          return this.garageHttpService.switchToDriveMode(id).pipe(
             catchError(() => {
               this.animationPlayers[id]?.pause();
               return EMPTY;
@@ -74,6 +82,7 @@ export class MoveService {
   }
 
   moveAllCar(): void {
+    this.firstSuccessTime = null;
     this.store
       .select(selectCars)
       .subscribe((carsResponse: CarsResponseBody) => {
@@ -85,15 +94,19 @@ export class MoveService {
 
   stopCar(id: number): void {
     const player = this.animationPlayers[id];
-    player.pause();
-    this.httpService.startStopEngine(id, 'stopped').subscribe();
+    player.onDestroy(() => {});
+    player.reset();
+
+    this.garageHttpService.startStopEngine(id, 'stopped').subscribe();
   }
 
   resetAllCars(): void {
     Object.values(this.animationPlayers).forEach(player => {
-      player.destroy();
+      player.onDestroy(() => {});
+      player.reset();
     });
-
+    this.firstSuccessTime = null;
+    this.winner = { id: 0, time: 0 };
     this.animationPlayers = {};
   }
 }

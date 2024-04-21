@@ -1,6 +1,13 @@
 <div class="pagination">
   <button
     type="button"
+    (click)="navigateToPage(firstPage)"
+    *ngIf="currentPage > 1"
+    class="pagination__page-link">
+    <img alt="close" src="../../../../assets/icons/control.svg" />
+  </button>
+  <button
+    type="button"
     (click)="goToPrevPage(currentPage)"
     *ngIf="currentPage > 1"
     class="pagination__page-link">
@@ -13,5 +20,15 @@
     *ngIf="currentPage < totalPages"
     class="pagination__page-link">
     {{ currentPage + 1 }}
+  </button>
+  <button
+    type="button"
+    (click)="navigateToPage(totalPages)"
+    *ngIf="currentPage < totalPages"
+    class="pagination__page-link">
+    <img
+      alt="close"
+      class="reverse"
+      src="../../../../assets/icons/control.svg" />
   </button>
 </div>

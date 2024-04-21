@@ -11,24 +11,29 @@ import {
   tap,
   withLatestFrom,
 } from 'rxjs';
-import { HttpService } from '../core/services/http.service';
-import { loadCarsData, setTotalCountData } from './actions';
-import { selectCurrentPage } from './selectors';
+import { GarageHttpService } from '../../core/services/http/garage-http.service';
+import { loadCarsData, setTotalCountData } from '../actions/garage-actions';
+import {
+  selectCarPerPage,
+  selectCurrentPage,
+} from '../selectors';
 
 @Injectable()
-export class RaceEffects {
+export class GarageEffects {
   loadCarsData$: Observable<Action> = createEffect(() =>
     this.actions$.pipe(
       ofType('[Cars] Load Cars Data'),
-      withLatestFrom(this.store.select(selectCurrentPage)),
-      exhaustMap(([, currentPage]) =>
-        from(this.httpService.getCarsList(currentPage, 7)).pipe(
+      withLatestFrom(
+        this.store.select(selectCurrentPage),
+        this.store.select(selectCarPerPage)
+      ),
+      exhaustMap(([, currentPage, carPerPage]) =>
+        from(this.garageHttpService.getCarsList(currentPage, carPerPage)).pipe(
           tap(response => {
             const totalCountHeader = Number(
               response.headers.get('X-Total-Count')
             );
             this.store.dispatch(setTotalCountData({ data: totalCountHeader }));
-            console.log('Total count:', totalCountHeader);
           }),
           map(response => {
             const receivedCarsData = response.body;
@@ -41,9 +46,10 @@ export class RaceEffects {
       )
     )
   );
+
   constructor(
     private actions$: Actions,
-    private httpService: HttpService,
+    private garageHttpService: GarageHttpService,
     private store: Store
   ) {}
 }

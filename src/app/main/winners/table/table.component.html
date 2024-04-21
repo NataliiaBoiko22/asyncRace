@@ -1,0 +1,32 @@
+<section class="table-wrapper">
+  <span class="table-counter"
+    >WINNERS: {{ totalWinnersCount$ | async }} cars</span
+  >
+  <div class="table">
+    <table class="table">
+      <thead>
+        <tr class="table__header">
+          <th class="table__header-item">№</th>
+          <th class="table__header-item">CAR</th>
+          <th class="table__header-item">NAME</th>
+          <th class="table__header-item">WINS</th>
+          <th class="table__header-item">BEST TIME (sec)</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="winnersData$ | async as winnersData">
+        <tr class="table__contain" *ngFor="let winnerItem of winnersData">
+          <td class="table__item">{{ winnerItem.id }}</td>
+          <td class="table__item">
+            <app-car
+              [car]="winnerItem"
+              class="table__item_img"
+              [carClass]="'table__item_img'"></app-car>
+          </td>
+          <td class="table__item">{{ winnerItem.name }}</td>
+          <td class="table__item">{{ winnerItem.wins }}</td>
+          <td class="table__item">{{ winnerItem.time }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

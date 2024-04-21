@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { carData } from '../../../assets/cars';
-import { createCarData, deleteCarData } from '../../Store/actions';
+import { deleteCarData } from '../../Store/actions/garage-actions';
 import { Car } from '../models/car';
-import { HttpService } from './http.service';
+import { GarageHttpService } from './http/garage-http.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +11,7 @@ import { HttpService } from './http.service';
 export class CarService {
   constructor(
     private store: Store,
-    private httpService: HttpService
+    private garageHttpService: GarageHttpService
   ) {}
   private generateRandomName(): string {
     const randomBrandIndex = Math.floor(
@@ -39,10 +39,10 @@ export class CarService {
     for (let i = 0; i < 6; i++) {
       generatedCar.name = this.generateRandomName();
       generatedCar.color = this.generateRandomColor();
-      this.httpService.createCar(generatedCar).subscribe({
+      this.garageHttpService.createCar(generatedCar).subscribe({
         next: car => {
           console.log('car', car);
-          this.store.dispatch(createCarData({ data: car }));
+          // this.store.dispatch(createCarData({ data: car }));
           this.store.dispatch({ type: '[Cars] Load Cars Data' });
         },
         error: error => {
@@ -63,10 +63,10 @@ export class CarService {
       generatedCar.color = this.generateRandomColor();
     }
     console.log('generatedCars', generatedCar);
-    this.httpService.createCar(generatedCar).subscribe({
+    this.garageHttpService.createCar(generatedCar).subscribe({
       next: car => {
         console.log('car', car);
-        this.store.dispatch(createCarData({ data: car }));
+        // this.store.dispatch(createCarData({ data: car }));
         this.store.dispatch({ type: '[Cars] Load Cars Data' });
       },
       error: error => {
@@ -75,7 +75,7 @@ export class CarService {
     });
   }
   deleteCar(id: number) {
-    this.httpService.deleteCar(id).subscribe({
+    this.garageHttpService.deleteCar(id).subscribe({
       next: () => {
         this.store.dispatch(deleteCarData({ data: id }));
       },

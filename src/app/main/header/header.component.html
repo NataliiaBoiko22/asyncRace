@@ -1,20 +1,20 @@
 <div class="header">
-    <div class="header__logo">
-        <span>*</span>
-        <h1>Async Race</h1>
-      </div>
-      <div class="header__buttons">
+  <div class="header__logo">
+    <span>*</span>
+    <h1>Async Race</h1>
+  </div>
+  <div class="header__buttons">
     <app-button
-    [text]="'GARAGE'"
-    [style]="'dark'"
-    [width]="'200px'"
-    [disabled]="false"
-    ></app-button>
-<app-button
-    [text]="'WINNERS'"
-    [style]="'dark'"
-    [width]="'200px'"
-    [disabled]="false"
-    ></app-button>
-</div>
+      [text]="'GARAGE'"
+      [style]="'dark'"
+      [width]="'200px'"
+      [disabled]="false"
+      [routerLink]="['/']"></app-button>
+    <app-button
+      [text]="'WINNERS'"
+      [style]="'dark'"
+      [width]="'200px'"
+      [disabled]="false"
+      [routerLink]="['/winners']"></app-button>
+  </div>
 </div>

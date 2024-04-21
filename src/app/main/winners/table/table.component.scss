@@ -1,0 +1,43 @@
+@import './../../../../assets/styles/variables.scss';
+@import './../../../../assets/styles/mixins.scss';
+
+.table-wrapper {
+  @include flex-column-center;
+  padding: 0 20px;
+  width: 100%;
+}
+
+.table {
+  display: table;
+  table-layout: fixed;
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0 auto;
+
+  &__header {
+    display: table-row;
+    border: 3px dotted $yellow_color;
+    // border-bottom: 3px dotted $yellow_color;
+  }
+
+  &__header-item {
+    display: table-cell;
+    width: 200%;
+    text-align: center;
+  }
+
+  &__contain-wrap {
+    display: table-row-group;
+  }
+
+  &__contain {
+    display: table-row;
+  }
+
+  &__item {
+    display: table-cell;
+    text-align: center;
+    border-bottom: 1px dotted $yellow_color;
+    height: 50px;
+  }
+}

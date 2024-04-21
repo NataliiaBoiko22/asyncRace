@@ -1,11 +1,18 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { map, Observable } from 'rxjs';
-import { setCurrentPage } from '../../../Store/actions';
-import { selectCars, selectCurrentPage } from '../../../Store/selectors';
-import { CarsResponseBody } from '../../models/car';
+import { combineLatest, map, Observable } from 'rxjs';
+import { setCurrentPage } from '../../../Store/actions/garage-actions';
+import { setCurrentWinnersPage } from '../../../Store/actions/winners-actions';
+import {
+  selectCarPerPage,
+  selectCurrentPage,
+  selectCurrentWinnersPage,
+  selectTotalCount,
+  selectTotalWinnersCount,
+  selectWinnersPerPage,
+} from '../../../Store/selectors';
 import { ButtonComponent } from '../button/button.component';
 
 @Component({
@@ -27,44 +34,85 @@ import { ButtonComponent } from '../button/button.component';
   ],
 })
 export class PaginationComponent implements OnInit {
-  totalResults$!: Observable<CarsResponseBody>;
-  totalPages = 100;
+  @Input() isWinnerPage: boolean = false;
+  totalPages$!: Observable<number | null>;
+  totalPages!: number;
+  firstPage = 1;
   currentPage$!: Observable<number | null>;
   currentPage!: number;
   @Output() pageChange = new EventEmitter<number>();
   constructor(private store: Store) {}
   ngOnInit() {
-    this.totalResults$ = this.store.select(selectCars);
-    this.currentPage$ = this.store.select(selectCurrentPage);
+    this.currentPage$ = this.isWinnerPage
+      ? this.store.select(selectCurrentWinnersPage)
+      : this.store.select(selectCurrentPage);
     this.currentPage$.subscribe(currentPage => {
       this.currentPage = currentPage !== null ? currentPage : 1;
     });
+    if (this.isWinnerPage) {
+      combineLatest([
+        this.store.select(selectTotalWinnersCount),
+        this.store.select(selectWinnersPerPage),
+      ])
+        .pipe(
+          map(([totalWinnersCount, winnersPerPage]) => {
+            return Math.ceil(totalWinnersCount / winnersPerPage);
+          })
+        )
+        .subscribe(totalPages => {
+          this.totalPages = totalPages;
+        });
+    } else {
+      combineLatest([
+        this.store.select(selectTotalCount),
+        this.store.select(selectCarPerPage),
+      ])
+        .pipe(
+          map(([totalCount, carPerPage]) => {
+            return Math.ceil(totalCount / carPerPage);
+          })
+        )
+        .subscribe(totalPages => {
+          this.totalPages = totalPages;
+        });
+    }
   }
-  get totalPages$(): Observable<number> {
-    return this.totalResults$.pipe(
-      map((totalResults: CarsResponseBody) =>
-        Math.ceil(totalResults.length / 7)
-      )
-    );
-  }
-  navigateToPage(currentPage: number) {
-    this.totalPages$.subscribe(totalPages => {
-      if (currentPage >= 1 && currentPage <= totalPages) {
-        this.pageChange.emit(currentPage);
-      }
-    });
+
+  navigateToPage(page: number) {
+    const currentPage = page;
+    if (this.isWinnerPage) {
+      this.store.dispatch(setCurrentWinnersPage({ currentPage }));
+      sessionStorage.setItem('currentPageWinners', currentPage.toString());
+      this.store.dispatch({ type: '[Winners] Load Winners Data' });
+    } else {
+      this.store.dispatch(setCurrentPage({ currentPage }));
+      sessionStorage.setItem('currentPageGarage', currentPage.toString());
+      this.store.dispatch({ type: '[Cars] Load Cars Data' });
+    }
   }
   goToNextPage(exCurrentPage: number): void {
     const currentPage = exCurrentPage + 1;
-    this.store.dispatch(setCurrentPage({ currentPage }));
-    localStorage.setItem('currentPageGarage', currentPage.toString());
-    this.store.dispatch({ type: '[Cars] Load Cars Data' });
+    if (this.isWinnerPage) {
+      this.store.dispatch(setCurrentWinnersPage({ currentPage }));
+      sessionStorage.setItem('currentPageWinners', currentPage.toString());
+      this.store.dispatch({ type: '[Winners] Load Winners Data' });
+    } else {
+      this.store.dispatch(setCurrentPage({ currentPage }));
+      sessionStorage.setItem('currentPageGarage', currentPage.toString());
+      this.store.dispatch({ type: '[Cars] Load Cars Data' });
+    }
   }
 
   goToPrevPage(exCurrentPage: number): void {
     const currentPage = exCurrentPage - 1;
-    this.store.dispatch(setCurrentPage({ currentPage }));
-    localStorage.setItem('currentPageGarage', currentPage.toString());
-    this.store.dispatch({ type: '[Cars] Load Cars Data' });
+    if (this.isWinnerPage) {
+      this.store.dispatch(setCurrentWinnersPage({ currentPage }));
+      sessionStorage.setItem('currentPageWinners', currentPage.toString());
+      this.store.dispatch({ type: '[Winners] Load Winners Data' });
+    } else {
+      this.store.dispatch(setCurrentPage({ currentPage }));
+      sessionStorage.setItem('currentPageGarage', currentPage.toString());
+      this.store.dispatch({ type: '[Cars] Load Cars Data' });
+    }
   }
 }

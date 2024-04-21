@@ -4,10 +4,10 @@
   @include flex-column-start;
   gap: 8px;
 }
-.track-counter{
+.track-counter {
   @include flex-column-start;
-    color: $milk_color;
-    @include font-20-600;
+  color: $milk_color;
+  @include font-20-600;
 }
 
 .track {
@@ -55,6 +55,7 @@
     width: 100px;
     height: 60px;
   }
+
   &__flag {
     position: absolute;
     right: 20px;

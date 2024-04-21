@@ -1,14 +1,11 @@
 import { createAction, props } from '@ngrx/store';
-import { Car, CarsResponseBody } from '../core/models/car';
+import { CarsResponseBody } from '../../core/models/car';
 console.log('loadCarsData');
 export const loadCarsData = createAction(
   '[Cars] Load Cars Data',
   props<{ data: CarsResponseBody }>()
 );
-export const createCarData = createAction(
-  '[Cars] Create Car Data',
-  props<{ data: Car }>()
-);
+
 export const setTotalCountData = createAction(
   '[Count] Set Total Count Data',
   props<{ data: number }>()
