@@ -64,7 +64,6 @@ export class MoveService {
 
   moveCar(id: number, name: string): void {
     this.firstSuccessTime = null;
-    this.resetAllCars();
     this.garageHttpService
       .startStopEngine(id, 'started')
       .pipe(
@@ -83,13 +82,16 @@ export class MoveService {
 
   moveAllCar(): void {
     this.firstSuccessTime = null;
-    this.store
-      .select(selectCars)
-      .subscribe((carsResponse: CarsResponseBody) => {
-        carsResponse.forEach((car: Car) => {
-          this.moveCar(car.id, car.name);
-        });
+    let carsArr = [] as CarsResponseBody;
+    this.store.select(selectCars).subscribe(cars => {
+      carsArr = cars;
+    });
+
+    if (carsArr) {
+      carsArr.forEach((car: Car) => {
+        this.moveCar(car.id, car.name);
       });
+    }
   }
 
   stopCar(id: number): void {

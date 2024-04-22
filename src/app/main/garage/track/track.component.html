@@ -1,51 +1,59 @@
 <section class="track-wrapper">
   <span class="track-counter">GARAGE: {{ totalCount$ | async }} cars</span>
-  <ul class="track" *ngIf="carsData$ | async as carsData">
-    <li class="track__item" *ngFor="let carItem of carsData">
-      <div class="track__item-top">
-        <button class="track__button-select" title="select" type="button">
-          SELECT
-        </button>
+  @if (carsData$ | async; as carsData) {
+    <ul class="track">
+      @for (carItem of carsData; track carItem) {
+        <li class="track__item">
+          <div class="track__item-top">
+            <button
+              class="track__button-select"
+              title="select"
+              type="button"
+              (click)="selectCar(carItem)">
+              SELECT
+            </button>
 
-        <button
-          class="track__button-select"
-          title="delete"
-          type="button"
-          (click)="deleteCar(carItem.id)">
-          DELETE
-        </button>
-        <span class="track__car-name">{{ carItem.name }}</span>
-      </div>
-      <div class="track__item-bottom">
-        <button
-          class="track__button-play"
-          title="play"
-          type="button"
-          (click)="moveCar(carItem.id, carItem.name)">
-          <img
-            width="20"
-            alt="play"
-            src="./../../../../assets/icons/play-svgrepo-com.svg
+            <button
+              class="track__button-select"
+              title="delete"
+              type="button"
+              (click)="deleteCar(carItem.id)">
+              DELETE
+            </button>
+            <span class="track__car-name">{{ carItem.name }}</span>
+          </div>
+          <div class="track__item-bottom">
+            <button
+              class="track__button-play"
+              title="play"
+              type="button"
+              (click)="moveCar(carItem.id, carItem.name)">
+              <img
+                width="20"
+                alt="play"
+                src="./../../../../assets/icons/play-svgrepo-com.svg
         " />
-        </button>
-        <button
-          class="track__button-play"
-          title="stop"
-          type="button"
-          (click)="stopCar(carItem.id)">
-          <img
-            width="20"
-            alt="play"
-            src="./../../../../assets/icons/stop-svgrepo-com.svg
+            </button>
+            <button
+              class="track__button-play"
+              title="stop"
+              type="button"
+              (click)="stopCar(carItem.id)">
+              <img
+                width="20"
+                alt="play"
+                src="./../../../../assets/icons/stop-svgrepo-com.svg
         " />
-        </button>
-        <app-car [car]="carItem" [carClass]="'track__car_img'"></app-car>
-      </div>
-      <img
-        class="track__flag"
-        alt="flag"
-        width="24"
-        src="../../../../assets/icons/flag-finish.svg" />
-    </li>
-  </ul>
+            </button>
+            <app-car [car]="carItem" [carClass]="'track__car_img'"></app-car>
+          </div>
+          <img
+            class="track__flag"
+            alt="flag"
+            width="24"
+            src="../../../../assets/icons/flag-finish.svg" />
+        </li>
+      }
+    </ul>
+  }
 </section>

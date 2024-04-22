@@ -12,7 +12,7 @@
   }
 
   &__input {
-    width: 250px;
+    width: 295px;
     padding: 12px;
     background-color: $milk_color;
     border-radius: 20px;
@@ -21,13 +21,13 @@
   &__input-color {
     position: absolute;
     top: 10px;
-    left: 210px;
+    left: 225px;
     border: none;
     outline: none;
     background-color: inherit;
   }
   input[type='color']::-webkit-color-swatch {
-    border: none;
+    border: 1px solid $black_color;
     border-radius: 10px;
     width: 60px;
     height: 20px;

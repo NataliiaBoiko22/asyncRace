@@ -9,24 +9,52 @@
           <th class="table__header-item">№</th>
           <th class="table__header-item">CAR</th>
           <th class="table__header-item">NAME</th>
-          <th class="table__header-item">WINS</th>
-          <th class="table__header-item">BEST TIME (sec)</th>
+          <th class="table__header-item">
+            WINS
+            <button
+              type="button"
+              (click)="sortWins()"
+              class="table__header-arrow-wr">
+              <img
+                alt="sort"
+                class="table__header-arrow"
+                src="../../../../assets/icons/control.svg" />
+            </button>
+          </th>
+          <th class="table__header-item">
+            BEST TIME (sec)
+            <button
+              type="button"
+              (click)="sortTime()"
+              class="table__header-arrow-wr">
+              <img
+                alt="sort"
+                class="table__header-arrow"
+                src="../../../../assets/icons/control.svg" />
+            </button>
+          </th>
         </tr>
       </thead>
-      <tbody *ngIf="winnersData$ | async as winnersData">
-        <tr class="table__contain" *ngFor="let winnerItem of winnersData">
-          <td class="table__item">{{ winnerItem.id }}</td>
-          <td class="table__item">
-            <app-car
-              [car]="winnerItem"
-              class="table__item_img"
-              [carClass]="'table__item_img'"></app-car>
-          </td>
-          <td class="table__item">{{ winnerItem.name }}</td>
-          <td class="table__item">{{ winnerItem.wins }}</td>
-          <td class="table__item">{{ winnerItem.time }}</td>
-        </tr>
-      </tbody>
+      @if (winnersData$ | async; as winnersData) {
+        <tbody>
+          @for (winnerItem of winnersData; track winnerItem; let i = $index) {
+            <tr class="table__contain">
+              <td class="table__item">
+                {{ (currentPage - 1) * winnersPerRage + i + 1 }}
+              </td>
+              <td class="table__item">
+                <app-car
+                  [car]="winnerItem"
+                  class="table__item_img"
+                  [carClass]="'table__item_img'"></app-car>
+              </td>
+              <td class="table__item">{{ winnerItem.name }}</td>
+              <td class="table__item">{{ winnerItem.wins }}</td>
+              <td class="table__item">{{ winnerItem.time }}</td>
+            </tr>
+          }
+        </tbody>
+      }
     </table>
   </div>
 </section>

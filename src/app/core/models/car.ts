@@ -9,11 +9,6 @@ export interface CarRequestBody {
   name: string;
   color: string;
 }
-
-export interface WinnerForAction {
-  id: number;
-  time: number;
-}
 export interface Winner {
   id: number;
   time: number;

@@ -36,15 +36,19 @@
     color: $text_color_dark;
   }
   &__close {
-    width: 16px;
+    width: 32px;
     position: absolute;
-    top: 15px;
+    top: 12px;
     right: 15px;
     border: none;
+    border-radius: 5px;
     outline: none;
+    align-items: center;
+    @include flex-column-center;
   }
-  &__close:focus,
-  :hover {
+  &__close:hover {
     color: $yellow_color;
+    cursor: pointer;
+    background-color: $yellow_color;
   }
 }

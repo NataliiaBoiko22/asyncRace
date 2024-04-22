@@ -4,6 +4,8 @@ import {
   deleteCarData,
   loadCarsData,
   setCurrentPage,
+  setNewCarData,
+  setSeclectedCarData,
   setTotalCountData,
 } from './actions/garage-actions';
 import {
@@ -62,8 +64,16 @@ export const raceReducer = createReducer(
     ...state,
     currentWinnersPage: page,
   })),
-   on(setTotalWinnersCountData, (state: RaceState, action) => ({
+  on(setTotalWinnersCountData, (state: RaceState, action) => ({
     ...state,
     totalWinnersCount: action.data,
   })),
+  on(setSeclectedCarData, (state: RaceState, { data: car }) => ({
+    ...state,
+    selectedCar: car,
+  })),
+  on(setNewCarData, (state: RaceState, { data: car }) => ({
+    ...state,
+    newCar: car,
+  }))
 );

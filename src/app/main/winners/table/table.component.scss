@@ -2,11 +2,15 @@
 @import './../../../../assets/styles/mixins.scss';
 
 .table-wrapper {
-  @include flex-column-center;
+  @include flex-column-start;
   padding: 0 20px;
   width: 100%;
+  gap: 20px;
 }
-
+.table-counter {
+  color: $milk_color;
+  @include font-20-600;
+}
 .table {
   display: table;
   table-layout: fixed;
@@ -17,15 +21,39 @@
   &__header {
     display: table-row;
     border: 3px dotted $yellow_color;
-    // border-bottom: 3px dotted $yellow_color;
   }
 
   &__header-item {
+    @include flex-row-center;
+
     display: table-cell;
     width: 200%;
     text-align: center;
+    padding: 14px;
+    position: relative;
   }
-
+  &__header-item:nth-child(-n + 4) {
+    border-right: 1px dotted $yellow_color;
+  }
+  &__header-arrow-wr {
+    background-color: $yellow_color_dark;
+    border: none;
+    outline: none;
+    position: absolute;
+    right: 8px;
+    top: 7px;
+    transition:
+      background-color 0.3s ease-out,
+      color 0.3s ease-out;
+  }
+  &__header-arrow-wr:hover,
+  :focus {
+    background-color: $yellow_color;
+  }
+  &__header-arrow {
+    width: 28px;
+    transform: rotate(90deg);
+  }
   &__contain-wrap {
     display: table-row-group;
   }

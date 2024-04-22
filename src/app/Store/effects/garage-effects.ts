@@ -12,11 +12,13 @@ import {
   withLatestFrom,
 } from 'rxjs';
 import { GarageHttpService } from '../../core/services/http/garage-http.service';
-import { loadCarsData, setTotalCountData } from '../actions/garage-actions';
 import {
-  selectCarPerPage,
-  selectCurrentPage,
-} from '../selectors';
+  loadCarsData,
+  setNewCarData,
+  setSeclectedCarData,
+  setTotalCountData,
+} from '../actions/garage-actions';
+import { selectCarPerPage, selectCurrentPage } from '../selectors';
 
 @Injectable()
 export class GarageEffects {
@@ -28,12 +30,24 @@ export class GarageEffects {
         this.store.select(selectCarPerPage)
       ),
       exhaustMap(([, currentPage, carPerPage]) =>
-        from(this.garageHttpService.getCarsList(currentPage, carPerPage)).pipe(
+        from(
+          this.garageHttpService.getCarsListHttp(currentPage, carPerPage)
+        ).pipe(
           tap(response => {
             const totalCountHeader = Number(
               response.headers.get('X-Total-Count')
             );
             this.store.dispatch(setTotalCountData({ data: totalCountHeader }));
+            this.store.dispatch(
+              setSeclectedCarData({
+                data: { name: '', color: '#000000', id: 0 },
+              })
+            );
+            this.store.dispatch(
+              setNewCarData({
+                data: { name: '', color: '#ffba08' },
+              })
+            );
           }),
           map(response => {
             const receivedCarsData = response.body;

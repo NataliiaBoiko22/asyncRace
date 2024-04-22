@@ -4,11 +4,19 @@ export const selectRaceState = createFeatureSelector<RaceState>('raceState');
 export const selectCars = createSelector(selectRaceState, state => state.cars);
 export const selectCarById = (carId: number) =>
   createSelector(selectRaceState, state =>
-    state.cars.find(car => car.id === carId)
+    state.cars ? state.cars.find(car => car.id === carId) : null
   );
 export const selectCurrentPage = createSelector(
   selectRaceState,
   state => state.currentPage
+);
+export const selectNewCar = createSelector(
+  selectRaceState,
+  state => state.newCar
+);
+export const selectSelectedCar = createSelector(
+  selectRaceState,
+  state => state.selectedCar
 );
 export const selectCarPerPage = createSelector(
   selectRaceState,

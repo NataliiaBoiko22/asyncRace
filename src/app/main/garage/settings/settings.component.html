@@ -12,12 +12,12 @@
       type="color"
       id="colorTop"
       value="#ffba08"
-      class="settings__input-color" 
-       [(ngModel)]="newCarColor" />
+      class="settings__input-color"
+      [(ngModel)]="newCarColor" />
     <app-button
       [text]="'CREATE'"
       [style]="'light'"
-      [width]="'200px'"
+      [width]="'100px'"
       [disabled]="false"
       (click)="createCar()"></app-button>
   </div>
@@ -27,19 +27,21 @@
       type="text"
       id="updateCar"
       class="settings__input"
-      placeholder="Update car" 
-      />
+      placeholder="Update car"
+      [(ngModel)]="selectedCarName" />
     <input
       title="color"
       value="#000000"
       type="color"
       id="colorBottom"
       class="settings__input-color"
-      placeholder="Update car" />
+      placeholder="Update car"
+      [(ngModel)]="selectedCarColor" />
     <app-button
       [text]="'UPDATE'"
       [style]="'light'"
-      [width]="'200px'"
-      [disabled]="false"></app-button>
+      [width]="'100px'"
+      [disabled]="false"
+      (click)="updateCar()"></app-button>
   </div>
 </div>

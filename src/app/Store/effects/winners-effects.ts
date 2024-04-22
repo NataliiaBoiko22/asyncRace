@@ -70,7 +70,7 @@ export class WinnersEffects {
     const receivedWinnersData = response.body;
     if (receivedWinnersData) {
       const requests = receivedWinnersData.map(winner =>
-        this.garageHttpService.getCar(winner.id).pipe(
+        this.garageHttpService.getCarHttp(winner.id).pipe(
           map(car => {
             const winnerData: WinnerState = {
               id: winner.id,
@@ -109,8 +109,11 @@ export class WinnersEffects {
           time: action.data.time,
         };
         const winnerObservable = existingWinner
-          ? this.winnersHttpService.updateWinner(existingWinner.id, winnerData)
-          : this.winnersHttpService.createWinner(winnerData);
+          ? this.winnersHttpService.updateWinnerHttp(
+              existingWinner.id,
+              winnerData
+            )
+          : this.winnersHttpService.createWinnerHttp(winnerData);
 
         return winnerObservable.pipe(
           map(winner => createWinnerDataSuccess({ data: winner })),

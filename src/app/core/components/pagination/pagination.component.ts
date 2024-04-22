@@ -1,6 +1,14 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { combineLatest, map, Observable } from 'rxjs';
 import { setCurrentPage } from '../../../Store/actions/garage-actions';
@@ -21,6 +29,7 @@ import { ButtonComponent } from '../button/button.component';
   imports: [ButtonComponent, CommonModule],
   templateUrl: './pagination.component.html',
   styleUrl: './pagination.component.scss',
+
   animations: [
     trigger('pageChange', [
       transition(':increment, :decrement', [
@@ -79,40 +88,30 @@ export class PaginationComponent implements OnInit {
   }
 
   navigateToPage(page: number) {
-    const currentPage = page;
-    if (this.isWinnerPage) {
-      this.store.dispatch(setCurrentWinnersPage({ currentPage }));
-      sessionStorage.setItem('currentPageWinners', currentPage.toString());
-      this.store.dispatch({ type: '[Winners] Load Winners Data' });
-    } else {
-      this.store.dispatch(setCurrentPage({ currentPage }));
-      sessionStorage.setItem('currentPageGarage', currentPage.toString());
-      this.store.dispatch({ type: '[Cars] Load Cars Data' });
-    }
+    this.updateCurrentPage(page);
   }
+
   goToNextPage(exCurrentPage: number): void {
-    const currentPage = exCurrentPage + 1;
-    if (this.isWinnerPage) {
-      this.store.dispatch(setCurrentWinnersPage({ currentPage }));
-      sessionStorage.setItem('currentPageWinners', currentPage.toString());
-      this.store.dispatch({ type: '[Winners] Load Winners Data' });
-    } else {
-      this.store.dispatch(setCurrentPage({ currentPage }));
-      sessionStorage.setItem('currentPageGarage', currentPage.toString());
-      this.store.dispatch({ type: '[Cars] Load Cars Data' });
-    }
+    this.updateCurrentPage(exCurrentPage + 1);
   }
 
   goToPrevPage(exCurrentPage: number): void {
-    const currentPage = exCurrentPage - 1;
-    if (this.isWinnerPage) {
-      this.store.dispatch(setCurrentWinnersPage({ currentPage }));
-      sessionStorage.setItem('currentPageWinners', currentPage.toString());
-      this.store.dispatch({ type: '[Winners] Load Winners Data' });
-    } else {
-      this.store.dispatch(setCurrentPage({ currentPage }));
-      sessionStorage.setItem('currentPageGarage', currentPage.toString());
-      this.store.dispatch({ type: '[Cars] Load Cars Data' });
-    }
+    this.updateCurrentPage(exCurrentPage - 1);
+  }
+
+  private updateCurrentPage(page: number) {
+    const currentPage = page;
+    const action = this.isWinnerPage ? setCurrentWinnersPage : setCurrentPage;
+
+    this.store.dispatch(action({ currentPage }));
+    sessionStorage.setItem(
+      this.isWinnerPage ? 'currentPageWinners' : 'currentPageGarage',
+      currentPage.toString()
+    );
+    this.store.dispatch({
+      type: this.isWinnerPage
+        ? '[Winners] Load Winners Data'
+        : '[Cars] Load Cars Data',
+    });
   }
 }

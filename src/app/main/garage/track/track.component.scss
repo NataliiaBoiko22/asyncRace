@@ -2,7 +2,7 @@
 @import './../../../../assets/styles/mixins.scss';
 .track-wrapper {
   @include flex-column-start;
-  gap: 8px;
+  gap: 10px;
 }
 .track-counter {
   @include flex-column-start;

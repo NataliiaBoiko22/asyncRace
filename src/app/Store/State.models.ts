@@ -1,4 +1,9 @@
-import { CarsResponseBody, WinnerState } from '../core/models/car';
+import {
+  Car,
+  CarRequestBody,
+  CarsResponseBody,
+  WinnerState,
+} from '../core/models/car';
 
 export interface RaceState {
   cars: CarsResponseBody;
@@ -9,6 +14,8 @@ export interface RaceState {
   winnersPerPage: number;
   totalWinnersCount: number;
   currentWinnersPage: number;
+  newCar: CarRequestBody;
+  selectedCar: Car;
 }
 let currentPage = 1;
 let currentWinnersPage = 1;
@@ -30,4 +37,13 @@ export const initialState: RaceState = {
   winnersPerPage: 7,
   totalWinnersCount: 0,
   currentWinnersPage: currentWinnersPage,
+  newCar: {
+    name: '',
+    color: '#ffba08',
+  },
+  selectedCar: {
+    name: '',
+    color: '#000000',
+    id: 0,
+  },
 };

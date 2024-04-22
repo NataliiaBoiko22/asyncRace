@@ -7,7 +7,7 @@
     cursor: pointer;
 
     margin: 0 5px;
-    color: $milk_color;
+    color: $text_color_light;
     border: none;
     outline: none;
     background-color: inherit;
@@ -17,13 +17,17 @@
 
     font-weight: bold;
     margin: 0 5px;
-    padding: 5px 10px;
-    border-radius: 50%;
+    padding: 8px 12px;
+
+    border-radius: 5px;
     color: $yellow_color;
-    border: 2px solid $milk_color;
+    border: 2px dotted $text_color_light;
   }
 }
 .reverse {
   cursor: pointer;
   transform: rotate(180deg);
+}
+.arrows {
+  margin-top: 5px;
 }

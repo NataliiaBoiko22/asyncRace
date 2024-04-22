@@ -33,7 +33,7 @@ export class WinnersHttpService {
         })
       );
   }
-  getWinner(id: number): Observable<Winner> {
+  getWinnerHttp(id: number): Observable<Winner> {
     return this.httpClient.get<Winner>(url + basePath.garage + `/${id}`).pipe(
       catchError(error => {
         return throwError(() => new Error(error));
@@ -41,7 +41,7 @@ export class WinnersHttpService {
     );
   }
 
-  createWinner(body: Winner): Observable<WinnerResponseBody> {
+  createWinnerHttp(body: Winner): Observable<WinnerResponseBody> {
     return this.httpClient
       .post<WinnerResponseBody>(url + basePath.winners, body, {
         headers: headers,
@@ -52,7 +52,7 @@ export class WinnersHttpService {
         })
       );
   }
-  updateWinner(
+  updateWinnerHttp(
     id: number,
     body: WinnerRequestBody
   ): Observable<WinnerResponseBody> {

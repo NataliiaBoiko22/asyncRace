@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ButtonComponent } from '../../../core/components/button/button.component';
 import { CarService } from '../../../core/services/car.service';
 import { MoveService } from '../../../core/services/move.service';
@@ -9,6 +9,7 @@ import { MoveService } from '../../../core/services/move.service';
   imports: [ButtonComponent],
   templateUrl: './control.component.html',
   styleUrl: './control.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ControlComponent {
   constructor(

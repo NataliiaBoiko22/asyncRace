@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { LoaderComponent } from '../../core/components/loader/loader.component';
 import { PaginationComponent } from '../../core/components/pagination/pagination.component';
 import { ControlComponent } from './control/control.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -14,8 +15,10 @@ import { TrackComponent } from './track/track.component';
     ControlComponent,
     TrackComponent,
     PaginationComponent,
+    LoaderComponent,
   ],
   templateUrl: './garage.component.html',
   styleUrl: './garage.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GarageComponent {}

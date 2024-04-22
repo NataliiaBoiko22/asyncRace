@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { combineLatest, map } from 'rxjs';
 import { carData } from '../../../assets/cars';
-import { deleteCarData } from '../../Store/actions/garage-actions';
+import {
+  deleteCarData,
+  setCurrentPage,
+} from '../../Store/actions/garage-actions';
+import { selectCarPerPage, selectTotalCount } from '../../Store/selectors';
 import { Car } from '../models/car';
 import { GarageHttpService } from './http/garage-http.service';
 
@@ -13,6 +18,7 @@ export class CarService {
     private store: Store,
     private garageHttpService: GarageHttpService
   ) {}
+
   private generateRandomName(): string {
     const randomBrandIndex = Math.floor(
       Math.random() * carData.carBrand.length
@@ -33,16 +39,14 @@ export class CarService {
   }
 
   generateCars() {
-    console.log('generateCars');
     const generatedCar = {} as Car;
-
-    for (let i = 0; i < 6; i++) {
+    const amountForGenerate = 100;
+    for (let i = 0; i < amountForGenerate; i++) {
       generatedCar.name = this.generateRandomName();
       generatedCar.color = this.generateRandomColor();
-      this.garageHttpService.createCar(generatedCar).subscribe({
+      this.garageHttpService.createCarHttp(generatedCar).subscribe({
         next: car => {
           console.log('car', car);
-          // this.store.dispatch(createCarData({ data: car }));
           this.store.dispatch({ type: '[Cars] Load Cars Data' });
         },
         error: error => {
@@ -54,7 +58,6 @@ export class CarService {
 
   createCar(newCarName: string, newCarColor: string) {
     const generatedCar = {} as Car;
-
     if (newCarName && newCarColor) {
       generatedCar.name = newCarName;
       generatedCar.color = newCarColor;
@@ -62,22 +65,42 @@ export class CarService {
       generatedCar.name = this.generateRandomName();
       generatedCar.color = this.generateRandomColor();
     }
-    console.log('generatedCars', generatedCar);
-    this.garageHttpService.createCar(generatedCar).subscribe({
-      next: car => {
-        console.log('car', car);
-        // this.store.dispatch(createCarData({ data: car }));
+    this.garageHttpService.createCarHttp(generatedCar).subscribe({
+      next: () => {
         this.store.dispatch({ type: '[Cars] Load Cars Data' });
       },
       error: error => {
         console.error('Error occurred:', error);
       },
     });
+    combineLatest([
+      this.store.select(selectTotalCount),
+      this.store.select(selectCarPerPage),
+    ])
+      .pipe(
+        map(([totalCount, carPerPage]) => {
+          return Math.ceil(totalCount / carPerPage);
+        })
+      )
+      .subscribe(totalPages => {
+        return this.store.dispatch(setCurrentPage({ currentPage: totalPages }));
+      });
   }
   deleteCar(id: number) {
-    this.garageHttpService.deleteCar(id).subscribe({
+    this.garageHttpService.deleteCarHttp(id).subscribe({
       next: () => {
         this.store.dispatch(deleteCarData({ data: id }));
+      },
+      error: error => {
+        console.error('Error occurred:', error);
+      },
+    });
+  }
+
+  updateCar(car: Car) {
+    this.garageHttpService.updateCarHttp(car).subscribe({
+      next: () => {
+        this.store.dispatch({ type: '[Cars] Load Cars Data' });
       },
       error: error => {
         console.error('Error occurred:', error);

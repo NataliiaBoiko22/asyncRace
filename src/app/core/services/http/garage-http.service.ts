@@ -11,7 +11,7 @@ import { basePath, getParams, headers, url } from './http-variables';
 export class GarageHttpService {
   constructor(private httpClient: HttpClient) {}
 
-  public getCarsList(
+  public getCarsListHttp(
     page: number,
     limit: number
   ): Observable<HttpResponse<CarsResponseBody>> {
@@ -28,7 +28,7 @@ export class GarageHttpService {
       );
   }
 
-  getCar(id: number) {
+  getCarHttp(id: number) {
     return this.httpClient.get<Car>(url + basePath.garage + `/${id}`).pipe(
       catchError(error => {
         return throwError(() => new Error(error));
@@ -63,7 +63,7 @@ export class GarageHttpService {
         })
       );
   }
-  createCar(body: CarRequestBody): Observable<Car> {
+  createCarHttp(body: CarRequestBody): Observable<Car> {
     return this.httpClient
       .post<Car>(url + basePath.garage, body, {
         headers: headers,
@@ -74,8 +74,19 @@ export class GarageHttpService {
         })
       );
   }
-
-  deleteCar(id: number) {
+  updateCarHttp(car: Car): Observable<Car> {
+    const body = { name: car.name, color: car.color };
+    return this.httpClient
+      .put<Car>(url + basePath.garage + `/${car.id}`, body, {
+        headers: headers,
+      })
+      .pipe(
+        catchError(error => {
+          return throwError(() => new Error(error));
+        })
+      );
+  }
+  deleteCarHttp(id: number) {
     return this.httpClient
       .delete(url + basePath.garage + `/${id}`, {
         headers: headers,
