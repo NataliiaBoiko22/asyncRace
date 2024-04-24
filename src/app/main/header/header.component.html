@@ -6,15 +6,19 @@
   <div class="header__buttons">
     <app-button
       [text]="'GARAGE'"
-      [style]="'dark'"
+      [style]="isActive('/') ? 'light' : 'dark'"
       [width]="'180px'"
       [disabled]="false"
-      [routerLink]="['/']"></app-button>
+      [routerLink]="['/']"
+      routerLinkActive="active-link"
+      (click)="resetCars()"></app-button>
     <app-button
       [text]="'WINNERS'"
-      [style]="'dark'"
+      [style]="isActive('/winners') ? 'light' : 'dark'"
       [width]="'180px'"
       [disabled]="false"
-      [routerLink]="['/winners']"></app-button>
+      [routerLink]="['/winners']"
+      routerLinkActive="active-link"
+      (click)="resetCars()"></app-button>
   </div>
 </div>

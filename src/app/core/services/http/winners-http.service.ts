@@ -7,7 +7,6 @@ import {
   WinnerResponseBody,
   WinnersResponseBody,
 } from '../../models/car';
-import { OrderOptions, SortOptions } from '../../models/query-parametr';
 import { basePath, getParamsWinners, headers, url } from './http-variables';
 
 @Injectable({
@@ -18,10 +17,15 @@ export class WinnersHttpService {
   public getWinnersList(
     page: number,
     limit: number,
-    sort?: SortOptions,
-    order?: OrderOptions
+    sort?: string,
+    order?: string
   ): Observable<HttpResponse<WinnersResponseBody>> {
     const params = getParamsWinners(page, limit, sort, order);
+
+    console.log('Request URL:', url + basePath.winners);
+    console.log('Request Params:', params);
+    console.log('Request Params sort:', sort);
+    console.log('Request Params order:', order);
     return this.httpClient
       .get<WinnersResponseBody>(url + basePath.winners, {
         params,
@@ -48,7 +52,7 @@ export class WinnersHttpService {
       })
       .pipe(
         catchError(error => {
-          return throwError(() => new Error(error));
+          return throwError(() => error);
         })
       );
   }
@@ -63,6 +67,17 @@ export class WinnersHttpService {
       .pipe(
         catchError(error => {
           return throwError(() => new Error(error));
+        })
+      );
+  }
+  deleteWinnerHttp(id: number) {
+    return this.httpClient
+      .delete(url + basePath.winners + `/${id}`, {
+        headers: headers,
+      })
+      .pipe(
+        catchError(error => {
+          return throwError(() => error);
         })
       );
   }

@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
@@ -13,7 +20,7 @@ import { selectNewCar, selectSelectedCar } from '../../../Store/selectors';
   imports: [ButtonComponent, FormsModule],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss',
- changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsComponent implements OnInit, OnDestroy {
   public selectedCarData$!: Observable<Car>;
@@ -35,7 +42,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   constructor(
     private carService: CarService,
-    private store: Store
+    private store: Store,
+    private cdr: ChangeDetectorRef
   ) {}
   ngOnInit(): void {
     this.selectedCarData$ = this.store.select(selectSelectedCar);
@@ -44,6 +52,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.selectedCarName = data.name;
         this.selectedCarColor = data.color;
         this.selectedCarId = data.id;
+        this.cdr.detectChanges();
       }
     );
     this.newCarData$ = this.store.select(selectNewCar);

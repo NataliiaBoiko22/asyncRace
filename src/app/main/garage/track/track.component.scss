@@ -32,13 +32,29 @@
     border: 1px solid $milk_color;
     cursor: pointer;
     border-radius: 8px;
+    transition:
+      background-color 0.3s ease-out,
+      color 0.3s ease-out;
+  }
+  &__button-select:hover {
+    color: $yellow_color;
+
+    border: 1px solid $yellow_color;
   }
   &__button-play {
     width: auto;
     padding: 4px 4px 0 4px;
-    background-color: $milk_color;
+    margin-right: 2px;
+    background-color: $yellow_color;
     cursor: pointer;
     border-radius: 8px;
+    border: none;
+    outline: none;
+  }
+  &__button-play:disabled {
+    background-color: $milk_color;
+    opacity: 0.5;
+    cursor: default;
   }
   &__item-top {
     @include flex-row-start;

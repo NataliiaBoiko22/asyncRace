@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule} from '@angular/router';
+import { Store } from '@ngrx/store';
 import { ButtonComponent } from '../../core/components/button/button.component';
+import { setAreCarsMoving } from '../../Store/actions/garage-actions';
 
 @Component({
   selector: 'app-header',
@@ -9,7 +11,15 @@ import { ButtonComponent } from '../../core/components/button/button.component';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
-export class HeaderComponent
-{
-
+export class HeaderComponent {
+  constructor(
+    private router: Router,
+    private store: Store
+  ) {}
+  isActive(link: string): boolean {
+    return this.router.url === link;
+  }
+  resetCars() {
+    this.store.dispatch(setAreCarsMoving({ areCarsMoving: false }));
+  }
 }

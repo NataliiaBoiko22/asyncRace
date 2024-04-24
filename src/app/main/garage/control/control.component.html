@@ -3,18 +3,18 @@
     [text]="'RACE'"
     [style]="'dark'"
     [width]="'100px'"
-    [disabled]="false"
+    [disabled]="(areCarsMoving$ | async) === true"
     (click)="raceAllCars()"></app-button>
   <app-button
     [text]="'RESET'"
     [style]="'dark'"
     [width]="'100px'"
-    [disabled]="false"
+    [disabled]="(areCarsMoving$ | async) === false"
     (click)="resetAllCars()"></app-button>
   <app-button
     [text]="'GENERATE CARS'"
     [style]="'dark'"
     [width]="'180px'"
-    [disabled]="false"
+    [disabled]="(areCarsMoving$ | async) === true"
     (click)="generateCars()"></app-button>
 </div>

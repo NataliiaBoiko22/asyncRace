@@ -17,19 +17,25 @@
               class="table__header-arrow-wr">
               <img
                 alt="sort"
-                class="table__header-arrow"
+                [ngClass]="{
+                  'table__header-arrow': acsWins === 'ASC',
+                  'table__header-arrow-desc': acsWins === 'DESC'
+                }"
                 src="../../../../assets/icons/control.svg" />
             </button>
           </th>
           <th class="table__header-item">
-            BEST TIME (sec)
+            BEST TIME <br />(sec)
             <button
               type="button"
               (click)="sortTime()"
               class="table__header-arrow-wr">
               <img
                 alt="sort"
-                class="table__header-arrow"
+                [ngClass]="{
+                  'table__header-arrow': acsTime === 'ASC',
+                  'table__header-arrow-desc': acsTime === 'DESC'
+                }"
                 src="../../../../assets/icons/control.svg" />
             </button>
           </th>

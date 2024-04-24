@@ -1,17 +1,12 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { combineLatest, map, Observable } from 'rxjs';
-import { setCurrentPage } from '../../../Store/actions/garage-actions';
+import {
+  setAreCarsMoving,
+  setCurrentPage,
+} from '../../../Store/actions/garage-actions';
 import { setCurrentWinnersPage } from '../../../Store/actions/winners-actions';
 import {
   selectCarPerPage,
@@ -113,5 +108,6 @@ export class PaginationComponent implements OnInit {
         ? '[Winners] Load Winners Data'
         : '[Cars] Load Cars Data',
     });
+    this.store.dispatch(setAreCarsMoving({ areCarsMoving: false }));
   }
 }

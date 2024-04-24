@@ -14,8 +14,11 @@ export interface RaceState {
   winnersPerPage: number;
   totalWinnersCount: number;
   currentWinnersPage: number;
+  areCarsMoving: boolean;
   newCar: CarRequestBody;
   selectedCar: Car;
+  sort: string;
+  order: string;
 }
 let currentPage = 1;
 let currentWinnersPage = 1;
@@ -37,6 +40,7 @@ export const initialState: RaceState = {
   winnersPerPage: 7,
   totalWinnersCount: 0,
   currentWinnersPage: currentWinnersPage,
+  areCarsMoving: false,
   newCar: {
     name: '',
     color: '#ffba08',
@@ -46,4 +50,6 @@ export const initialState: RaceState = {
     color: '#000000',
     id: 0,
   },
+  sort: '',
+  order: '',
 };

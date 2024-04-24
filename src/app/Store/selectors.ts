@@ -43,3 +43,19 @@ export const selectTotalWinnersCount = createSelector(
   selectRaceState,
   state => state.totalWinnersCount
 );
+export const selectAreCarsMoving = createSelector(
+  selectRaceState,
+  state => state.areCarsMoving
+);
+export const selectSortData = createSelector(
+  selectRaceState,
+  state => state.sort
+);
+export const selectOrderData = createSelector(
+  selectRaceState,
+  state => state.order
+);
+export const selectWinnerById = (winnerId: number) =>
+  createSelector(selectRaceState, state =>
+    state.winners ? state.winners.find(winner => winner.id === winnerId) : null
+  );

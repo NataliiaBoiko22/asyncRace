@@ -10,6 +10,7 @@ import {
   Observable,
   of,
   switchMap,
+  take,
   tap,
   withLatestFrom,
 } from 'rxjs';
@@ -24,22 +25,73 @@ import {
 } from '../actions/winners-actions';
 import {
   selectCurrentWinnersPage,
+  selectOrderData,
+  selectSortData,
   selectWinners,
   selectWinnersPerPage,
 } from '../selectors';
 
 @Injectable()
 export class WinnersEffects {
+  // loadWinnersData$: Observable<Action> = createEffect(() =>
+  //   this.actions$.pipe(
+  //     ofType('[Winners] Load Winners Data'),
+  //     tap(action => console.log('Action:', action)),
+  //     withLatestFrom(
+  //       this.store.select(selectCurrentWinnersPage),
+  //       this.store.select(selectWinnersPerPage)
+  //     ),
+  //     exhaustMap(
+  //       ([action.data, currentPage, carPerPage]: [
+  //         WinnerSortBody,
+  //         number,
+  //         number,
+  //       ]) => {
+  //         console.log(
+  //           'object',
+  //           currentPage,
+  //           carPerPage,
+  //           action.sort,
+  //           action.order
+  //         );
+  //         return this.loadWinnersData(
+  //           currentPage,
+  //           carPerPage,
+  //           action.,
+  //           action.order
+  //         ).pipe(
+  //           catchError(() => of({ type: '[Winners] Load Winners Data Error' }))
+  //         );
+  //       }
+  //     )
+  //   )
+  // );
   loadWinnersData$: Observable<Action> = createEffect(() =>
     this.actions$.pipe(
       ofType('[Winners] Load Winners Data'),
-      withLatestFrom(
-        this.store.select(selectCurrentWinnersPage),
-        this.store.select(selectWinnersPerPage)
-      ),
-      exhaustMap(([, currentPage, carPerPage]) =>
-        this.loadWinnersData(currentPage, carPerPage).pipe(
-          catchError(() => of({ type: 'Error occurred' }))
+      switchMap(() =>
+        this.store.pipe(
+          withLatestFrom(
+            this.store.select(selectSortData),
+            this.store.select(selectOrderData),
+            this.store.select(selectCurrentWinnersPage),
+            this.store.select(selectWinnersPerPage)
+          ),
+          exhaustMap(([, sort, order, currentPage, carPerPage]) => {
+            console.log('object', sort, order, currentPage, carPerPage);
+            return sort !== '' && order !== ''
+              ? this.loadWinnersData(currentPage, carPerPage, sort, order).pipe(
+                  catchError(() =>
+                    of({ type: '[Winners] Load Winners Data Error' })
+                  )
+                )
+              : this.loadWinnersData(currentPage, carPerPage).pipe(
+                  catchError(() =>
+                    of({ type: '[Winners] Load Winners Data Error' })
+                  )
+                );
+          }),
+          take(1)
         )
       )
     )
@@ -47,21 +99,26 @@ export class WinnersEffects {
 
   private loadWinnersData(
     currentPage: number,
-    carPerPage: number
+    carPerPage: number,
+    sort?: string,
+    order?: string
   ): Observable<Action> {
-    return this.winnersHttpService.getWinnersList(currentPage, carPerPage).pipe(
-      tap((response: HttpResponse<WinnersResponseBody>) => {
-        const totalWinnersCountHeader = Number(
-          response.headers.get('X-Total-Count')
-        );
-        this.store.dispatch(
-          setTotalWinnersCountData({ data: totalWinnersCountHeader })
-        );
-      }),
-      switchMap((response: HttpResponse<WinnersResponseBody>) => {
-        return this.processWinnersData(response);
-      })
-    );
+    console.log('loadWinnersData', [currentPage, carPerPage, sort, order]);
+    return this.winnersHttpService
+      .getWinnersList(currentPage, carPerPage, sort, order)
+      .pipe(
+        tap((response: HttpResponse<WinnersResponseBody>) => {
+          const totalWinnersCountHeader = Number(
+            response.headers.get('X-Total-Count')
+          );
+          this.store.dispatch(
+            setTotalWinnersCountData({ data: totalWinnersCountHeader })
+          );
+        }),
+        switchMap((response: HttpResponse<WinnersResponseBody>) => {
+          return this.processWinnersData(response);
+        })
+      );
   }
 
   private processWinnersData(
@@ -85,6 +142,7 @@ export class WinnersEffects {
       );
       return forkJoin(requests).pipe(
         map(winnerDataArray => {
+          console.log('Processed Winners Data:', winnerDataArray);
           return loadWinnersDataSuccess({
             data: winnerDataArray,
           });

@@ -1,5 +1,4 @@
 import { HttpHeaders } from '@angular/common/http';
-import { OrderOptions, SortOptions } from '../../models/query-parametr';
 
 export const url = 'http://127.0.0.1:3000';
 export const basePath = {
@@ -22,19 +21,19 @@ export const getParams = (page: number, limit: number) => {
 export const getParamsWinners = (
   page: number,
   limit: number,
-  sort?: SortOptions,
-  order?: OrderOptions
+  sort?: string,
+  order?: string
 ): Partial<{
   _page: number;
   _limit: number;
-  _sort?: SortOptions;
-  _order?: OrderOptions;
+  _sort?: string;
+  _order?: string;
 }> => {
   const params: Partial<{
     _page: number;
     _limit: number;
-    _sort?: SortOptions;
-    _order?: OrderOptions;
+    _sort?: string;
+    _order?: string;
   }> = {
     _page: page,
     _limit: limit,

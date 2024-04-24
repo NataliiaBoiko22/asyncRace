@@ -2,6 +2,7 @@ export interface Car {
   name: string;
   color: string;
   id: number;
+  isMoving?: boolean;
 }
 
 export type CarsResponseBody = Car[];

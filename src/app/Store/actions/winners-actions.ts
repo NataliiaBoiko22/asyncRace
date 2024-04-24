@@ -30,3 +30,7 @@ export const setCurrentWinnersPage = createAction(
   '[Page] Set Current Winners Page',
   props<{ currentPage: number }>()
 );
+export const setSortData = createAction(
+  '[Winners] Set Sort Data',
+  props<{ sort: string; order: string }>()
+);

@@ -3,15 +3,19 @@ import { WinnerState } from '../core/models/car';
 import {
   deleteCarData,
   loadCarsData,
+  setAreCarsMoving,
   setCurrentPage,
   setNewCarData,
   setSeclectedCarData,
   setTotalCountData,
+  startCar,
+  stopCar,
 } from './actions/garage-actions';
 import {
   createWinnerDataSuccess,
   loadWinnersDataSuccess,
   setCurrentWinnersPage,
+  setSortData,
   setTotalWinnersCountData,
 } from './actions/winners-actions';
 import { initialState, RaceState } from './state.models';
@@ -75,5 +79,28 @@ export const raceReducer = createReducer(
   on(setNewCarData, (state: RaceState, { data: car }) => ({
     ...state,
     newCar: car,
+  })),
+  on(startCar, (state: RaceState, { carId }) => ({
+    ...state,
+    cars: state.cars.map(car =>
+      car.id === carId ? { ...car, isMoving: true } : car
+    ),
+    areCarsMoving: true,
+  })),
+  on(stopCar, (state: RaceState, { carId }) => ({
+    ...state,
+    cars: state.cars.map(car =>
+      car.id === carId ? { ...car, isMoving: false } : car
+    ),
+    areCarsMoving: false,
+  })),
+  on(setAreCarsMoving, (state: RaceState, { areCarsMoving }) => ({
+    ...state,
+    areCarsMoving: areCarsMoving,
+  })),
+  on(setSortData, (state: RaceState, { sort, order }) => ({
+    ...state,
+    sort: sort,
+    order: order,
   }))
 );

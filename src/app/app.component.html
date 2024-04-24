@@ -1,6 +1,8 @@
 @defer {
+  <div class="app-wrapper">
   <app-header></app-header>
   <router-outlet> </router-outlet>
+  </div>
 } @loading (minimum 1000) {
   <app-loader></app-loader>
 } @error {

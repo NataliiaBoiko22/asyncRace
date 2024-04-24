@@ -26,13 +26,19 @@ export const setCurrentPage = createAction(
   '[Page] Set Current Page',
   props<{ currentPage: number }>()
 );
-export const setNextPageToken = createAction(
-  '[Page] Set Next Page Token',
-  props<{ nextPageToken: string }>()
-);
-export const setPrevPageToken = createAction(
-  '[Page] Set Prev Page Token',
-  props<{ prevPageToken: string }>()
-);
+
 export const loadNextPage = createAction('[Page] Load Next Page');
 export const loadPrevPage = createAction('[Page] Load Previous Page');
+export const startCar = createAction(
+  '[Cars] Start Car',
+  props<{ carId: number }>()
+);
+
+export const stopCar = createAction(
+  '[Cars] Stop Car',
+  props<{ carId: number }>()
+);
+export const setAreCarsMoving = createAction(
+  '[Cars] Set Are Cars Moving',
+  props<{ areCarsMoving: boolean }>()
+);

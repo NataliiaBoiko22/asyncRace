@@ -1,14 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { combineLatest, map } from 'rxjs';
+import { combineLatest, map, of, switchMap, take } from 'rxjs';
 import { carData } from '../../../assets/cars';
 import {
   deleteCarData,
+  setAreCarsMoving,
   setCurrentPage,
+  stopCar,
 } from '../../Store/actions/garage-actions';
-import { selectCarPerPage, selectTotalCount } from '../../Store/selectors';
+import {
+  selectCarPerPage,
+  selectTotalCount,
+  selectWinnerById,
+} from '../../Store/selectors';
 import { Car } from '../models/car';
 import { GarageHttpService } from './http/garage-http.service';
+import { WinnersHttpService } from './http/winners-http.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +23,8 @@ import { GarageHttpService } from './http/garage-http.service';
 export class CarService {
   constructor(
     private store: Store,
-    private garageHttpService: GarageHttpService
+    private garageHttpService: GarageHttpService,
+    private winnersHttpService: WinnersHttpService
   ) {}
 
   private generateRandomName(): string {
@@ -83,21 +91,43 @@ export class CarService {
         })
       )
       .subscribe(totalPages => {
+        this.store.dispatch(setAreCarsMoving({ areCarsMoving: false }));
         return this.store.dispatch(setCurrentPage({ currentPage: totalPages }));
       });
   }
   deleteCar(id: number) {
-    this.garageHttpService.deleteCarHttp(id).subscribe({
-      next: () => {
-        this.store.dispatch(deleteCarData({ data: id }));
-      },
-      error: error => {
-        console.error('Error occurred:', error);
-      },
-    });
+    this.garageHttpService
+      .deleteCarHttp(id)
+      .pipe(
+        switchMap(() => {
+          return this.store.select(selectWinnerById(id)).pipe(
+            take(1),
+            switchMap(winner => {
+              if (winner) {
+                return this.winnersHttpService.deleteWinnerHttp(id);
+              } else {
+                return of(null);
+              }
+            })
+          );
+        })
+      )
+      .subscribe({
+        next: () => {
+          this.store.dispatch(setAreCarsMoving({ areCarsMoving: false }));
+
+          this.store.dispatch(deleteCarData({ data: id }));
+          this.store.dispatch({ type: '[Cars] Load Cars Data' });
+        },
+        error: error => {
+          console.error('Error occurred:', error);
+        },
+      });
   }
 
   updateCar(car: Car) {
+    this.store.dispatch(setAreCarsMoving({ areCarsMoving: false }));
+
     this.garageHttpService.updateCarHttp(car).subscribe({
       next: () => {
         this.store.dispatch({ type: '[Cars] Load Cars Data' });
