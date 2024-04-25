@@ -1,8 +1,12 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
-import { Car, CarRequestBody, CarsResponseBody } from '../../models/car';
-import { StartStopParameter } from '../../models/query-parametr';
+import {
+  Car,
+  CarRequestBody,
+  CarsResponseBody,
+  StartStopParameter,
+} from '../../models/car';
 import { basePath, getParams, headers, url } from './http-variables';
 
 @Injectable({

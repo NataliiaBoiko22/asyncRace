@@ -1,0 +1,82 @@
+@import './../../../assets/styles/variables.scss';
+@import './../../../assets/styles/mixins.scss';
+
+.footer {
+  @include flex-row-space;
+  @include font-16-400;
+  //   background-color: $black_color;
+  height: 90px;
+  color: $milk_color;
+  background-image: none;
+  border-top: 3px dashed $yellow_color;
+  @media (min-width: 820px) {
+    background-color: $black_color;
+    width: auto;
+    height: 80px;
+    padding: 0 16px;
+  }
+  &__info {
+    @include flex-row-center;
+    gap: 10px;
+  }
+  &__img {
+    width: 50%;
+    height: 70px;
+    background-image: none;
+    color: $black_color;
+    transform: rotate(-180deg);
+
+    @media (min-width: 820px) {
+      background-color: $black_color;
+      background-image: url('../../../assets/icons/backgroundImg.jpg');
+      background-position: right;
+      background-repeat: no-repeat;
+      background-position-y: -80px;
+    }
+  }
+  &__author {
+    margin-right: 8px;
+  }
+
+  &__author-link {
+    position: relative;
+    color: $text_color_light;
+    text-decoration: none;
+    @include font-16-600;
+
+    transition: all 500ms ease-in-out;
+  }
+  &__author-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 500ms ease-in-out;
+    background-color: $yellow_color;
+    border-radius: 5px;
+  }
+  &__author-link:hover::after,
+  &__author-link:focus::after {
+    transform: scaleX(1);
+    height: 2px;
+
+    transform-origin: bottom left;
+  }
+  &__author-link:hover {
+    transform: scale(1.05);
+  }
+  &__github-logo {
+    width: 40px;
+    transition: all 250ms ease-in-out;
+    margin: 0 10px;
+    cursor: pointer;
+  }
+
+  &__github-logo:hover {
+    transform: scale(1.05);
+  }
+}

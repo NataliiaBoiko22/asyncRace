@@ -33,39 +33,6 @@ import {
 
 @Injectable()
 export class WinnersEffects {
-  // loadWinnersData$: Observable<Action> = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType('[Winners] Load Winners Data'),
-  //     tap(action => console.log('Action:', action)),
-  //     withLatestFrom(
-  //       this.store.select(selectCurrentWinnersPage),
-  //       this.store.select(selectWinnersPerPage)
-  //     ),
-  //     exhaustMap(
-  //       ([action.data, currentPage, carPerPage]: [
-  //         WinnerSortBody,
-  //         number,
-  //         number,
-  //       ]) => {
-  //         console.log(
-  //           'object',
-  //           currentPage,
-  //           carPerPage,
-  //           action.sort,
-  //           action.order
-  //         );
-  //         return this.loadWinnersData(
-  //           currentPage,
-  //           carPerPage,
-  //           action.,
-  //           action.order
-  //         ).pipe(
-  //           catchError(() => of({ type: '[Winners] Load Winners Data Error' }))
-  //         );
-  //       }
-  //     )
-  //   )
-  // );
   loadWinnersData$: Observable<Action> = createEffect(() =>
     this.actions$.pipe(
       ofType('[Winners] Load Winners Data'),
@@ -142,7 +109,6 @@ export class WinnersEffects {
       );
       return forkJoin(requests).pipe(
         map(winnerDataArray => {
-          console.log('Processed Winners Data:', winnerDataArray);
           return loadWinnersDataSuccess({
             data: winnerDataArray,
           });
@@ -175,8 +141,7 @@ export class WinnersEffects {
 
         return winnerObservable.pipe(
           map(winner => createWinnerDataSuccess({ data: winner })),
-          catchError(error => {
-            console.error('Error occurred:', error);
+          catchError(() => {
             return of({ type: 'Error occurred' });
           }),
           tap(() => console.log('Winner processed successfully'))

@@ -22,10 +22,6 @@ export class WinnersHttpService {
   ): Observable<HttpResponse<WinnersResponseBody>> {
     const params = getParamsWinners(page, limit, sort, order);
 
-    console.log('Request URL:', url + basePath.winners);
-    console.log('Request Params:', params);
-    console.log('Request Params sort:', sort);
-    console.log('Request Params order:', order);
     return this.httpClient
       .get<WinnersResponseBody>(url + basePath.winners, {
         params,

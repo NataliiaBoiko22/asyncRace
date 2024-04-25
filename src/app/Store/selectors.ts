@@ -34,7 +34,6 @@ export const selectWinners = createSelector(
   selectRaceState,
   state => state.winners
 );
-
 export const selectWinnersPerPage = createSelector(
   selectRaceState,
   state => state.winnersPerPage

@@ -15,7 +15,7 @@ import { Car, CarsResponseBody } from '../../../core/models/car';
 import { CarService } from '../../../core/services/car.service';
 import { MoveService } from '../../../core/services/move.service';
 import {
-  setSeclectedCarData,
+  setSelectedCarData,
   stopCar,
 } from '../../../Store/actions/garage-actions';
 import { selectCars, selectTotalCount } from '../../../Store/selectors';
@@ -65,7 +65,7 @@ export class TrackComponent implements OnInit, OnDestroy {
   selectCar(carItem: Car) {
     this.store.dispatch(stopCar({ carId: carItem.id }));
 
-    this.store.dispatch(setSeclectedCarData({ data: carItem }));
+    this.store.dispatch(setSelectedCarData({ data: carItem }));
   }
   ngOnDestroy(): void {
     if (this.carsDataSubscription) {

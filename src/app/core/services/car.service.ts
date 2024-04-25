@@ -6,14 +6,13 @@ import {
   deleteCarData,
   setAreCarsMoving,
   setCurrentPage,
-  stopCar,
 } from '../../Store/actions/garage-actions';
 import {
   selectCarPerPage,
   selectTotalCount,
   selectWinnerById,
 } from '../../Store/selectors';
-import { Car } from '../models/car';
+import { Car, CarRequestBody } from '../models/car';
 import { GarageHttpService } from './http/garage-http.service';
 import { WinnersHttpService } from './http/winners-http.service';
 
@@ -53,8 +52,7 @@ export class CarService {
       generatedCar.name = this.generateRandomName();
       generatedCar.color = this.generateRandomColor();
       this.garageHttpService.createCarHttp(generatedCar).subscribe({
-        next: car => {
-          console.log('car', car);
+        next: () => {
           this.store.dispatch({ type: '[Cars] Load Cars Data' });
         },
         error: error => {
@@ -64,11 +62,11 @@ export class CarService {
     }
   }
 
-  createCar(newCarName: string, newCarColor: string) {
+  createCar(data: CarRequestBody) {
     const generatedCar = {} as Car;
-    if (newCarName && newCarColor) {
-      generatedCar.name = newCarName;
-      generatedCar.color = newCarColor;
+    if (data.name && data.color) {
+      generatedCar.name = data.name;
+      generatedCar.color = data.color;
     } else {
       generatedCar.name = this.generateRandomName();
       generatedCar.color = this.generateRandomColor();
@@ -115,7 +113,6 @@ export class CarService {
       .subscribe({
         next: () => {
           this.store.dispatch(setAreCarsMoving({ areCarsMoving: false }));
-
           this.store.dispatch(deleteCarData({ data: id }));
           this.store.dispatch({ type: '[Cars] Load Cars Data' });
         },
@@ -123,18 +120,5 @@ export class CarService {
           console.error('Error occurred:', error);
         },
       });
-  }
-
-  updateCar(car: Car) {
-    this.store.dispatch(setAreCarsMoving({ areCarsMoving: false }));
-
-    this.garageHttpService.updateCarHttp(car).subscribe({
-      next: () => {
-        this.store.dispatch({ type: '[Cars] Load Cars Data' });
-      },
-      error: error => {
-        console.error('Error occurred:', error);
-      },
-    });
   }
 }

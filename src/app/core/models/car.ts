@@ -4,7 +4,10 @@ export interface Car {
   id: number;
   isMoving?: boolean;
 }
-
+export interface StartStopParameter {
+  velocity: number;
+  distance: number;
+}
 export type CarsResponseBody = Car[];
 export interface CarRequestBody {
   name: string;

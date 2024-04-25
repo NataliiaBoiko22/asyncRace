@@ -11,8 +11,7 @@ import { catchError, EMPTY, mergeMap, Subject, take, takeUntil } from 'rxjs';
 import { startCar, stopCar } from '../../Store/actions/garage-actions';
 import { createWinnerData } from '../../Store/actions/winners-actions';
 import { selectCars } from '../../Store/selectors';
-import { Car, CarsResponseBody } from '../models/car';
-import { StartStopParameter } from '../models/query-parametr';
+import { Car, CarsResponseBody, StartStopParameter } from '../models/car';
 import { GarageHttpService } from './http/garage-http.service';
 import { ModalService } from './modal.service';
 
@@ -55,7 +54,6 @@ export class MoveService {
       document.querySelector(`#carImage${id}`)
     );
     this.animationPlayers[id] = player;
-
     player.play();
     player.onDone(() => {
       if (!this.firstSuccessTime || time < this.firstSuccessTime) {
@@ -140,7 +138,6 @@ export class MoveService {
             delete this.animationPlayers[carId];
           }
         });
-
         this.resettingAnimation = false;
       });
   }

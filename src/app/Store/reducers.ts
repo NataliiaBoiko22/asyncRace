@@ -1,50 +1,34 @@
 import { createReducer, on } from '@ngrx/store';
 import { WinnerState } from '../core/models/car';
-import {
-  deleteCarData,
-  loadCarsData,
-  setAreCarsMoving,
-  setCurrentPage,
-  setNewCarData,
-  setSeclectedCarData,
-  setTotalCountData,
-  startCar,
-  stopCar,
-} from './actions/garage-actions';
-import {
-  createWinnerDataSuccess,
-  loadWinnersDataSuccess,
-  setCurrentWinnersPage,
-  setSortData,
-  setTotalWinnersCountData,
-} from './actions/winners-actions';
+import * as GA from './actions/garage-actions';
+import * as WA from './actions/winners-actions';
 import { initialState, RaceState } from './state.models';
 
 export const raceReducer = createReducer(
   initialState,
-  on(loadCarsData, (state: RaceState, action) => ({
+  on(GA.loadCarsDataSuccess, (state: RaceState, action) => ({
     ...state,
     cars: action.data,
   })),
-  on(setTotalCountData, (state: RaceState, action) => ({
+  on(GA.setTotalCountData, (state: RaceState, action) => ({
     ...state,
     totalCount: action.data,
   })),
 
-  on(deleteCarData, (state: RaceState, action) => ({
+  on(GA.deleteCarData, (state: RaceState, action) => ({
     ...state,
     cars: state.cars.filter(car => car.id !== action.data),
   })),
-  on(setCurrentPage, (state: RaceState, { currentPage: page }) => ({
+  on(GA.setCurrentPage, (state: RaceState, { currentPage: page }) => ({
     ...state,
     currentPage: page,
   })),
-  on(loadWinnersDataSuccess, (state: RaceState, action) => ({
+  on(WA.loadWinnersDataSuccess, (state: RaceState, action) => ({
     ...state,
     winners: action.data,
   })),
 
-  on(createWinnerDataSuccess, (state: RaceState, action) => {
+  on(WA.createWinnerDataSuccess, (state: RaceState, action) => {
     const winnerData: WinnerState = {
       id: action.data.id,
       name: '',
@@ -64,41 +48,79 @@ export const raceReducer = createReducer(
       winners: [...state.winners, winnerData],
     };
   }),
-  on(setCurrentWinnersPage, (state: RaceState, { currentPage: page }) => ({
+  on(WA.setCurrentWinnersPage, (state: RaceState, { currentPage: page }) => ({
     ...state,
     currentWinnersPage: page,
   })),
-  on(setTotalWinnersCountData, (state: RaceState, action) => ({
+  on(WA.setTotalWinnersCountData, (state: RaceState, action) => ({
     ...state,
     totalWinnersCount: action.data,
   })),
-  on(setSeclectedCarData, (state: RaceState, { data: car }) => ({
+  on(GA.setSelectedCarData, (state: RaceState, { data: car }) => ({
     ...state,
     selectedCar: car,
   })),
-  on(setNewCarData, (state: RaceState, { data: car }) => ({
+  on(GA.setNameForNewCarData, (state: RaceState, { data: name }) => ({
+    ...state,
+    newCar: { ...state.newCar, name: name },
+  })),
+  on(GA.setColorForNewCarData, (state: RaceState, { data: color }) => ({
+    ...state,
+    newCar: { ...state.newCar, color: color },
+  })),
+  on(GA.setNameForSelectedCarData, (state: RaceState, { data: name }) => ({
+    ...state,
+    selectedCar: { ...state.selectedCar, name: name },
+  })),
+  on(GA.setColorForSelectedCarData, (state: RaceState, { data: color }) => ({
+    ...state,
+    selectedCar: { ...state.selectedCar, color: color },
+  })),
+  on(GA.setNewCarData, (state: RaceState, { data: car }) => ({
     ...state,
     newCar: car,
   })),
-  on(startCar, (state: RaceState, { carId }) => ({
+  on(GA.setNewCarDataSuccess, (state: RaceState, { data: car }) => ({
+    ...state,
+    cars: [...state.cars, car],
+  })),
+  on(GA.setUpdateCarDataSuccess, (state: RaceState, { data: action }) => {
+    const updatedCars = state.cars.map(car => {
+      if (car.id === action.id) {
+        return {
+          ...car,
+          name: action.name,
+          color: action.color,
+        };
+      }
+      return car;
+    });
+
+    return {
+      ...state,
+      cars: updatedCars,
+    };
+  }),
+
+  on(GA.startCar, (state: RaceState, { carId }) => ({
     ...state,
     cars: state.cars.map(car =>
       car.id === carId ? { ...car, isMoving: true } : car
     ),
     areCarsMoving: true,
   })),
-  on(stopCar, (state: RaceState, { carId }) => ({
+  on(GA.stopCar, (state: RaceState, { carId }) => ({
     ...state,
     cars: state.cars.map(car =>
       car.id === carId ? { ...car, isMoving: false } : car
     ),
     areCarsMoving: false,
   })),
-  on(setAreCarsMoving, (state: RaceState, { areCarsMoving }) => ({
+  on(GA.setAreCarsMoving, (state: RaceState, { areCarsMoving }) => ({
     ...state,
     areCarsMoving: areCarsMoving,
   })),
-  on(setSortData, (state: RaceState, { sort, order }) => ({
+  on(WA.setSortData, (state: RaceState, { sort, order }) => ({
     ...state,
     sort: sort,
     order: order,

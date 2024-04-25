@@ -22,7 +22,6 @@ export interface RaceState {
 }
 let currentPage = 1;
 let currentWinnersPage = 1;
-
 const savedCurrentPage = sessionStorage.getItem('currentPageGarage');
 if (savedCurrentPage) {
   currentPage = parseInt(savedCurrentPage, 10);

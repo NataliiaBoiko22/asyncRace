@@ -1,19 +1,25 @@
 <div class="settings">
   <div class="settings__input-item">
-    <input
-      title="createCar"
-      type="text"
-      id="createCar"
-      class="settings__input"
-      placeholder="Create car"
-      [(ngModel)]="newCarName" />
-    <input
-      title="color"
-      type="color"
-      id="colorTop"
-      value="#ffba08"
-      class="settings__input-color"
-      [(ngModel)]="newCarColor" />
+    @if (newCarData$ | async; as carData) {
+      <input
+        title="createCar"
+        type="text"
+        id="createCar"
+        class="settings__input"
+        placeholder="Create car"
+        [(ngModel)]="newCarData.name"
+        (input)="handleInputChange($event, 'newCarName')" />
+
+      <input
+        title="color"
+        type="color"
+        id="colorTop"
+        value="#ffba08"
+        class="settings__input-color"
+        [(ngModel)]="newCarData.color"
+        (input)="handleInputChange($event, 'newCarColor')" />
+    }
+
     <app-button
       [text]="'CREATE'"
       [style]="'light'"
@@ -22,21 +28,25 @@
       (click)="createCar()"></app-button>
   </div>
   <div class="settings__input-item">
-    <input
-      title="updateCar"
-      type="text"
-      id="updateCar"
-      class="settings__input"
-      placeholder="Update car"
-      [(ngModel)]="selectedCarName" />
-    <input
-      title="color"
-      value="#000000"
-      type="color"
-      id="colorBottom"
-      class="settings__input-color"
-      placeholder="Update car"
-      [(ngModel)]="selectedCarColor" />
+    @if (selectedCarData$ | async; as carData) {
+      <input
+        title="updateCar"
+        type="text"
+        id="updateCar"
+        class="settings__input"
+        placeholder="Update car"
+        [(ngModel)]="selectedCarData.name"
+        (input)="handleInputChange($event, 'selectedCarName')" />
+      <input
+        title="color"
+        value="#000000"
+        type="color"
+        id="colorBottom"
+        class="settings__input-color"
+        placeholder="Update car"
+        [(ngModel)]="selectedCarData.color"
+        (input)="handleInputChange($event, 'selectedCarColor')" />
+    }
     <app-button
       [text]="'UPDATE'"
       [style]="'light'"

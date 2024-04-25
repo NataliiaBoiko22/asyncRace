@@ -22,9 +22,7 @@ export class ModalService {
         .centerHorizontally()
         .centerVertically(),
     });
-
     const modalPortal = new ComponentPortal(ModalComponent);
-
     const componentRef = this.overlayRef.attach(modalPortal);
     componentRef.instance.title = title;
     componentRef.instance.content = content;

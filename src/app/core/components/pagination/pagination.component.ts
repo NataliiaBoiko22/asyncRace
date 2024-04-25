@@ -8,14 +8,7 @@ import {
   setCurrentPage,
 } from '../../../Store/actions/garage-actions';
 import { setCurrentWinnersPage } from '../../../Store/actions/winners-actions';
-import {
-  selectCarPerPage,
-  selectCurrentPage,
-  selectCurrentWinnersPage,
-  selectTotalCount,
-  selectTotalWinnersCount,
-  selectWinnersPerPage,
-} from '../../../Store/selectors';
+import * as SL from '../../../Store/selectors';
 import { ButtonComponent } from '../button/button.component';
 
 @Component({
@@ -48,15 +41,15 @@ export class PaginationComponent implements OnInit {
   constructor(private store: Store) {}
   ngOnInit() {
     this.currentPage$ = this.isWinnerPage
-      ? this.store.select(selectCurrentWinnersPage)
-      : this.store.select(selectCurrentPage);
+      ? this.store.select(SL.selectCurrentWinnersPage)
+      : this.store.select(SL.selectCurrentPage);
     this.currentPage$.subscribe(currentPage => {
       this.currentPage = currentPage !== null ? currentPage : 1;
     });
     if (this.isWinnerPage) {
       combineLatest([
-        this.store.select(selectTotalWinnersCount),
-        this.store.select(selectWinnersPerPage),
+        this.store.select(SL.selectTotalWinnersCount),
+        this.store.select(SL.selectWinnersPerPage),
       ])
         .pipe(
           map(([totalWinnersCount, winnersPerPage]) => {
@@ -68,8 +61,8 @@ export class PaginationComponent implements OnInit {
         });
     } else {
       combineLatest([
-        this.store.select(selectTotalCount),
-        this.store.select(selectCarPerPage),
+        this.store.select(SL.selectTotalCount),
+        this.store.select(SL.selectCarPerPage),
       ])
         .pipe(
           map(([totalCount, carPerPage]) => {
@@ -97,7 +90,6 @@ export class PaginationComponent implements OnInit {
   private updateCurrentPage(page: number) {
     const currentPage = page;
     const action = this.isWinnerPage ? setCurrentWinnersPage : setCurrentPage;
-
     this.store.dispatch(action({ currentPage }));
     sessionStorage.setItem(
       this.isWinnerPage ? 'currentPageWinners' : 'currentPageGarage',
