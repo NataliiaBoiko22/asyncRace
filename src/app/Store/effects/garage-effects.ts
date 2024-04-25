@@ -14,11 +14,7 @@ import {
 } from 'rxjs';
 import { GarageHttpService } from '../../core/services/http/garage-http.service';
 import * as GA from '../actions/garage-actions';
-import {
-  selectCarPerPage,
-  selectCurrentPage,
-  selectTotalCount,
-} from '../selectors';
+import * as SL from '../selectors';
 
 @Injectable()
 export class GarageEffects {
@@ -26,8 +22,8 @@ export class GarageEffects {
     this.actions$.pipe(
       ofType('[Cars] Load Cars Data'),
       withLatestFrom(
-        this.store.select(selectCurrentPage),
-        this.store.select(selectCarPerPage)
+        this.store.select(SL.selectCurrentPage),
+        this.store.select(SL.selectCarPerPage)
       ),
       exhaustMap(([, currentPage, carPerPage]) =>
         from(
@@ -55,7 +51,7 @@ export class GarageEffects {
       )
     )
   );
-  
+
   updateCar$ = createEffect(() =>
     this.actions$.pipe(
       ofType(GA.setUpdateCarData),
@@ -81,8 +77,8 @@ export class GarageEffects {
     this.actions$.pipe(
       ofType(GA.setNewCarData),
       withLatestFrom(
-        this.store.select(selectTotalCount),
-        this.store.select(selectCarPerPage)
+        this.store.select(SL.selectTotalCount),
+        this.store.select(SL.selectCarPerPage)
       ),
       switchMap(([action, totalCount, carPerPage]) =>
         this.garageHttpService.createCarHttp(action.data).pipe(

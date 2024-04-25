@@ -8,12 +8,7 @@ import {
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { setSortData } from '../../../Store/actions/winners-actions';
-import {
-  selectCurrentWinnersPage,
-  selectTotalWinnersCount,
-  selectWinners,
-  selectWinnersPerPage,
-} from '../../../Store/selectors';
+import * as SL from '../../../Store/selectors';
 import { CarComponent } from '../../garage/car/car.component';
 
 @Component({
@@ -25,8 +20,8 @@ import { CarComponent } from '../../garage/car/car.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TableComponent implements OnInit, OnDestroy {
-  public totalWinnersCount$ = this.store.select(selectTotalWinnersCount);
-  public winnersData$ = this.store.select(selectWinners);
+  public totalWinnersCount$ = this.store.select(SL.selectTotalWinnersCount);
+  public winnersData$ = this.store.select(SL.selectWinners);
   private winnersPerPageSubscription!: Subscription;
   private currentWinnersPageSubscription!: Subscription;
   currentPage!: number;
@@ -40,12 +35,12 @@ export class TableComponent implements OnInit, OnDestroy {
       type: '[Winners] Load Winners Data',
     });
     this.winnersPerPageSubscription = this.store
-      .select(selectWinnersPerPage)
+      .select(SL.selectWinnersPerPage)
       .subscribe(winners => {
         this.winnersPerRage = winners;
       });
-    this.currentWinnersPageSubscription=this.store
-      .select(selectCurrentWinnersPage)
+    this.currentWinnersPageSubscription = this.store
+      .select(SL.selectCurrentWinnersPage)
       .subscribe(page => {
         this.currentPage = page;
       });
@@ -65,7 +60,6 @@ export class TableComponent implements OnInit, OnDestroy {
     if (this.winnersPerPageSubscription) {
       this.winnersPerPageSubscription.unsubscribe();
     }
-
     if (this.currentWinnersPageSubscription) {
       this.currentWinnersPageSubscription.unsubscribe();
     }

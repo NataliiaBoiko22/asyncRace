@@ -2,16 +2,8 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { combineLatest, map, of, switchMap, take } from 'rxjs';
 import { carData } from '../../../assets/cars';
-import {
-  deleteCarData,
-  setAreCarsMoving,
-  setCurrentPage,
-} from '../../Store/actions/garage-actions';
-import {
-  selectCarPerPage,
-  selectTotalCount,
-  selectWinnerById,
-} from '../../Store/selectors';
+import * as GA from '../../Store/actions/garage-actions';
+import * as SL from '../../Store/selectors';
 import { Car, CarRequestBody } from '../models/car';
 import { GarageHttpService } from './http/garage-http.service';
 import { WinnersHttpService } from './http/winners-http.service';
@@ -80,8 +72,8 @@ export class CarService {
       },
     });
     combineLatest([
-      this.store.select(selectTotalCount),
-      this.store.select(selectCarPerPage),
+      this.store.select(SL.selectTotalCount),
+      this.store.select(SL.selectCarPerPage),
     ])
       .pipe(
         map(([totalCount, carPerPage]) => {
@@ -89,8 +81,10 @@ export class CarService {
         })
       )
       .subscribe(totalPages => {
-        this.store.dispatch(setAreCarsMoving({ areCarsMoving: false }));
-        return this.store.dispatch(setCurrentPage({ currentPage: totalPages }));
+        this.store.dispatch(GA.setAreCarsMoving({ areCarsMoving: false }));
+        return this.store.dispatch(
+          GA.setCurrentPage({ currentPage: totalPages })
+        );
       });
   }
   deleteCar(id: number) {
@@ -98,7 +92,7 @@ export class CarService {
       .deleteCarHttp(id)
       .pipe(
         switchMap(() => {
-          return this.store.select(selectWinnerById(id)).pipe(
+          return this.store.select(SL.selectWinnerById(id)).pipe(
             take(1),
             switchMap(winner => {
               if (winner) {
@@ -112,8 +106,8 @@ export class CarService {
       )
       .subscribe({
         next: () => {
-          this.store.dispatch(setAreCarsMoving({ areCarsMoving: false }));
-          this.store.dispatch(deleteCarData({ data: id }));
+          this.store.dispatch(GA.setAreCarsMoving({ areCarsMoving: false }));
+          this.store.dispatch(GA.deleteCarData({ data: id }));
           this.store.dispatch({ type: '[Cars] Load Cars Data' });
         },
         error: error => {

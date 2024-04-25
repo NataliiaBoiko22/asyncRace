@@ -17,19 +17,8 @@ import {
 import { WinnersResponseBody, WinnerState } from '../../core/models/car';
 import { GarageHttpService } from '../../core/services/http/garage-http.service';
 import { WinnersHttpService } from '../../core/services/http/winners-http.service';
-import {
-  createWinnerData,
-  createWinnerDataSuccess,
-  loadWinnersDataSuccess,
-  setTotalWinnersCountData,
-} from '../actions/winners-actions';
-import {
-  selectCurrentWinnersPage,
-  selectOrderData,
-  selectSortData,
-  selectWinners,
-  selectWinnersPerPage,
-} from '../selectors';
+import * as WA  from '../actions/winners-actions';
+import * as SL from '../selectors';
 
 @Injectable()
 export class WinnersEffects {
@@ -39,10 +28,10 @@ export class WinnersEffects {
       switchMap(() =>
         this.store.pipe(
           withLatestFrom(
-            this.store.select(selectSortData),
-            this.store.select(selectOrderData),
-            this.store.select(selectCurrentWinnersPage),
-            this.store.select(selectWinnersPerPage)
+            this.store.select(SL.selectSortData),
+            this.store.select(SL.selectOrderData),
+            this.store.select(SL.selectCurrentWinnersPage),
+            this.store.select(SL.selectWinnersPerPage)
           ),
           exhaustMap(([, sort, order, currentPage, carPerPage]) => {
             console.log('object', sort, order, currentPage, carPerPage);
@@ -79,7 +68,7 @@ export class WinnersEffects {
             response.headers.get('X-Total-Count')
           );
           this.store.dispatch(
-            setTotalWinnersCountData({ data: totalWinnersCountHeader })
+            WA.setTotalWinnersCountData({ data: totalWinnersCountHeader })
           );
         }),
         switchMap((response: HttpResponse<WinnersResponseBody>) => {
@@ -109,7 +98,7 @@ export class WinnersEffects {
       );
       return forkJoin(requests).pipe(
         map(winnerDataArray => {
-          return loadWinnersDataSuccess({
+          return WA.loadWinnersDataSuccess({
             data: winnerDataArray,
           });
         })
@@ -121,8 +110,8 @@ export class WinnersEffects {
 
   createWinner$: Observable<Action> = createEffect(() =>
     this.actions$.pipe(
-      ofType(createWinnerData),
-      withLatestFrom(this.store.select(selectWinners)),
+      ofType(WA.createWinnerData),
+      withLatestFrom(this.store.select(SL.selectWinners)),
       exhaustMap(([action, winners]) => {
         const existingWinner = winners.find(
           winner => winner.id === action.data.id
@@ -140,7 +129,7 @@ export class WinnersEffects {
           : this.winnersHttpService.createWinnerHttp(winnerData);
 
         return winnerObservable.pipe(
-          map(winner => createWinnerDataSuccess({ data: winner })),
+          map(winner => WA.createWinnerDataSuccess({ data: winner })),
           catchError(() => {
             return of({ type: 'Error occurred' });
           }),
